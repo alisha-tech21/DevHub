@@ -16,16 +16,6 @@ function Navbar() {
   const [allBlogs, setAllBlogs] = useState([]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
     fetch("http://localhost:8000/api/blogs")
       .then((res) => res.json())
       .then((data) => setAllBlogs(data.data))
@@ -93,12 +83,20 @@ function Navbar() {
           className="flex items-center gap-4 text-gray-500"
           ref={dropdownRef}
         >
-          <button
-            onClick={() => setPaletteOpen(true)}
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            <FaSearch />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              <FaSearch />
+            </button>
+
+            <CommandPalette
+              isOpen={isPaletteOpen}
+              onClose={() => setPaletteOpen(false)}
+              blogs={allBlogs}
+            />
+          </div>
           <button
             className="md:hidden text-white text-xl"
             onClick={() => setMobileMenu(!mobileMenu)}
@@ -106,7 +104,20 @@ function Navbar() {
             ☰
           </button>
 
-          <FaBell className="hover:text-white cursor-pointer" />
+          {/* Desktop Bell */}
+          <div className="hidden md:block">
+            <FaBell className="hover:text-white cursor-pointer" />
+          </div>
+
+          {/* Mobile Sign In */}
+          {!user && (
+            <button
+              onClick={() => navigate("/login")}
+              className="md:hidden px-3 py-1.5 rounded-lg border border-neutral-700 text-white text-sm"
+            >
+              Sign In
+            </button>
+          )}
 
           {/* 🔥 IF USER NOT LOGGED IN */}
           {!user && (
@@ -138,12 +149,6 @@ function Navbar() {
                   Sign Up
                 </button>
               </div>
-              <button
-                onClick={() => navigate("/login")}
-                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-indigo-500/20 cursor-pointer"
-              >
-                Sign In
-              </button>
             </>
           )}
 
@@ -233,11 +238,6 @@ function Navbar() {
           </Link>
         </div>
       )}
-      <CommandPalette
-        isOpen={isPaletteOpen}
-        onClose={() => setPaletteOpen(false)}
-        blogs={allBlogs}
-      />
     </>
   );
 }
