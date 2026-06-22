@@ -96,7 +96,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     if (!user) return;
 
     try {
-      const res = await fetch("${API_URL}/api/portfolio/save", {
+      const res = await fetch(`${API_URL}/api/portfolio/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
