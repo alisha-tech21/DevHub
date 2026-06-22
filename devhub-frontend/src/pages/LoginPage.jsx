@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 
 const LoginPage = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [isLogin, setIsLogin] = useState(true);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [email, setEmail] = useState("");
@@ -46,14 +47,11 @@ const LoginPage = () => {
     if (isOtpSent) {
       if (timer === 0) return toast.error("OTP expired!");
       try {
-        const response = await fetch(
-          "http://localhost:8000/api/users/verify-otp",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, otp }),
-          },
-        );
+        const response = await fetch("${API_URL}/api/users/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp }),
+        });
         const data = await response.json();
         if (response.ok) {
           toast.success("Verified successfully! Please sign in.");
@@ -75,7 +73,7 @@ const LoginPage = () => {
       : { email, password, name, githubUsername: "not-set" };
 
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
