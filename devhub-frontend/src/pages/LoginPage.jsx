@@ -47,7 +47,7 @@ const LoginPage = () => {
     if (isOtpSent) {
       if (timer === 0) return toast.error("OTP expired!");
       try {
-        const response = await fetch("${API_URL}/api/users/verify-otp", {
+        const response = await fetch(`${API_URL}/api/users/verify-otp`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, otp }),
