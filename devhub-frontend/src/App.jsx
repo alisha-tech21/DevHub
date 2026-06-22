@@ -24,6 +24,7 @@ import Status from "./pages/Status";
 import Security from "./pages/Security";
 
 function AppContent() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useContext(AuthContext);
   const [githubData, setGithubData] = useState(null);
   const [blogs, setBlogs] = useState([]);
@@ -35,7 +36,7 @@ function AppContent() {
   const fetchFilteredBlogs = async (tags) => {
     try {
       const query = tags.length > 0 ? `?tag=${tags.join(",")}` : "";
-      const res = await fetch(`http://localhost:8000/api/blogs${query}`);
+      const res = await fetch(`${API_URL}/api/blogs${query}`);
       const json = await res.json();
       if (json.success) setBlogs(json.data);
     } catch (err) {
@@ -53,7 +54,7 @@ function AppContent() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/blogs");
+      const res = await fetch("${API_URL}/api/blogs");
       const json = await res.json();
       if (json.success && json.data) setBlogs(json.data);
     } catch (err) {
@@ -68,9 +69,7 @@ function AppContent() {
   const handleFetchGithub = async (username) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `http://localhost:8000/api/github/profile/${username}`,
-      );
+      const res = await fetch(`${API_URL}/api/github/profile/${username}`);
       const data = await res.json();
       if (data) {
         setGithubData({ ...data, username });
