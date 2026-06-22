@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  🌐 <a href="https://dev-hub-ebon.vercel.app/">Live Website Preview</a> | 🔗 <a href="https://devhub-production-3e81.up.railway.app/">Backend API</a>
+  🌐 <a href="https://dev-hub-ebon.vercel.app/">Live Website Preview</a> 
 </p>
 
 ---
