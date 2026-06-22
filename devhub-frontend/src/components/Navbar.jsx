@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import CommandPalette from "./CommandPalette";
 
 function Navbar() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
@@ -16,7 +17,7 @@ function Navbar() {
   const [allBlogs, setAllBlogs] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/blogs")
+    fetch("${API_URL}/api/blogs")
       .then((res) => res.json())
       .then((data) => setAllBlogs(data.data))
       .catch((err) => console.error(err));
