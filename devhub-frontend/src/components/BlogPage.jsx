@@ -7,6 +7,7 @@ import CodeBlock from "../components/CodeBlock";
 import Comments from "../components/Comments";
 
 function BlogPage() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ function BlogPage() {
 
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:8000/api/blogs/${id}`);
+        const res = await fetch(`${API_URL}/api/blogs/${id}`);
         const data = await res.json();
         setBlog(data.data);
       } catch (err) {
