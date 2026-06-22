@@ -54,7 +54,7 @@ function AppContent() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("${API_URL}/api/blogs");
+      const res = await fetch(`${API_URL}/api/blogs`);
       const json = await res.json();
       if (json.success && json.data) setBlogs(json.data);
     } catch (err) {
