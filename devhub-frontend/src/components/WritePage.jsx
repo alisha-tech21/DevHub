@@ -183,7 +183,7 @@ function WritePage() {
       const match = htmlContent.match(/src="([^"]+)"/);
       const imageUrl = match ? match[1] : "https://via.placeholder.com/800";
 
-      const response = await fetch("${API_URL}/api/blogs", {
+      const response = await fetch(`${API_URL}/api/blogs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
