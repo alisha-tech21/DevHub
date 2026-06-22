@@ -18,7 +18,7 @@ require("dotenv").config();
 const app = express();
 app.use(
   cors({
-    origin: ["https://dev-hub-ebon.vercel.app/"],
+    origin: ["https://dev-hub-ebon.vercel.app"],
     credentials: true,
   }),
 );
