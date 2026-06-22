@@ -12,7 +12,7 @@ function BlogLayout({
   useEffect(() => {
     const fetchTrendingTags = async () => {
       try {
-        const res = await fetch("${API_URL}/api/blogs/trending-tags");
+        const res = await fetch(`${API_URL}/api/blogs/trending-tags`);
         const data = await res.json();
 
         if (data.success) {
