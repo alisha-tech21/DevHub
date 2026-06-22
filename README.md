@@ -1,57 +1,64 @@
-# 🚀 DevHub
+<h1 align="center">🚀 DevHub</h1>
 
-**DevHub is a powerful developer ecosystem that transforms GitHub activity into stunning, dynamic portfolios.**  
-It includes secure authentication, real-time GitHub synchronization, and a built-in blogging system for developers to showcase their journey.
+<p align="center">
+  <b>DevHub is a powerful developer ecosystem that transforms GitHub activity into stunning, dynamic portfolios.</b><br>
+  It includes secure authentication, real-time GitHub synchronization, and a built-in blogging system for developers to showcase their journey.
+</p>
+
+<p align="center">
+  🌐 <a href="https://dev-hub-ebon.vercel.app/">Live Website Preview</a> | 🔗 <a href="https://devhub-production-3e81.up.railway.app/">Backend API</a>
+</p>
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- 🔐 **Secure Authentication System**
-  - Email-based Login & Signup
-  - OTP Verification for account security
-  - Protected routes for authenticated users
+<div align="center">
 
-- 🔗 **GitHub Integration**
-  - Fetch GitHub profile data in real-time
-  - Display repositories, stats, languages, and contributions
-  - Auto-generate developer portfolio from GitHub
+<table border="0">
+ <tr>
+  <td width="250" align="center" style="padding: 20px;">
+    🔐 <br> <b>Secure Auth</b> <br><br> <sub>Email login, OTP verification, & JWT tokens.</sub>
+  </td>
+  <td width="250" align="center" style="padding: 20px;">
+    🔗 <br> <b>GitHub Sync</b> <br><br> <sub>Real-time stats, repos, & contribution tracking.</sub>
+  </td>
+  <td width="250" align="center" style="padding: 20px;">
+    🧑‍💻 <br> <b>Dynamic Portfolio</b> <br><br> <sub>Auto-generated, fully responsive profile pages.</sub>
+  </td>
+ </tr>
+ <tr>
+  <td width="250" align="center" style="padding: 20px;">
+    ✍️ <br> <b>Blogging System</b> <br><br> <sub>Publish technical blogs with a clean, modern UI.</sub>
+  </td>
+  <td width="250" align="center" style="padding: 20px;">
+    🌐 <br> <b>Modern UI/UX</b> <br><br> <sub>Dark-themed, smooth animations, & responsive.</sub>
+  </td>
+ </tr>
+</table>
 
-- 🧑‍💻 **Dynamic Portfolio System**
-  - Beautiful developer portfolio pages
-  - Real-time updates from GitHub
-  - Save and manage portfolios
-
-- ✍️ **Built-in Blogging System**
-  - Write and publish technical blogs
-  - Share knowledge with developer community
-  - Clean and responsive blog UI
-
-- 🌐 **Modern UI/UX**
-  - Dark-themed professional interface
-  - Smooth animations and transitions
-  - Fully responsive design (mobile + desktop)
+</div>
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend:**
-- React.js ⚛️
-- Tailwind CSS 🎨
-- Framer Motion 🎞️
-- React Router DOM 🚏
-- React Icons 🔥
+<div align="center">
 
-**Backend:**
-- Node.js
-- Express.js
-- MongoDB Atlas 🍃
-- JWT Authentication 🔐
-- Nodemailer (OTP Email Service) 📧
+### Frontend
+<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+<img src="https://img.shields.io/badge/Framer_Motion-000000?style=for-the-badge&logo=framer&logoColor=white" />
 
-**APIs:**
-- GitHub REST API 🔗
+### Backend
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+<img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+
+### Integrations
+<img src="https://img.shields.io/badge/GitHub_API-181717?style=for-the-badge&logo=github&logoColor=white" />
+
+</div>
 
 ---
 
@@ -74,4 +81,3 @@ It includes secure authentication, real-time GitHub synchronization, and a built
 - Modern SaaS-like UI experience  
 
 ---
-
