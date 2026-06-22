@@ -69,6 +69,7 @@ export const FontSize = Extension.create({
   },
 });
 function WritePage() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [status, setStatus] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -182,7 +183,7 @@ function WritePage() {
       const match = htmlContent.match(/src="([^"]+)"/);
       const imageUrl = match ? match[1] : "https://via.placeholder.com/800";
 
-      const response = await fetch("http://localhost:8000/api/blogs", {
+      const response = await fetch("${API_URL}/api/blogs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
