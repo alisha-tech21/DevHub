@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 
 function Home({ onFetchGithub, loading }) {
   const [blogs, setBlogs] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/blogs")
+    fetch("${API_URL}/api/blogs")
       .then((res) => res.json())
       .then((data) => setBlogs(data.data))
       .catch((err) => console.error(err));
