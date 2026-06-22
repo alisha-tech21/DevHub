@@ -41,7 +41,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const handleScrollToSearch = () => {
     const searchBar = document.getElementById("search-bar");
     if (searchBar) {
@@ -55,9 +55,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     const loadSavedPortfolio = async () => {
       if (user && !githubData) {
         try {
-          const res = await fetch(
-            `http://localhost:8000/api/portfolio/${user._id}`,
-          );
+          const res = await fetch(`${API_URL}/api/portfolio/${user._id}`);
           const data = await res.json();
           if (data?.githubUsername) onFetchGithub(data.githubUsername);
         } catch (err) {
@@ -73,9 +71,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
 
       console.log("Sending username:", githubUsername);
 
-      const res = await fetch(
-        `http://localhost:8000/api/github/${githubUsername}`,
-      );
+      const res = await fetch(`${API_URL}/api/github/${githubUsername}`);
 
       const data = await res.json();
 
@@ -100,7 +96,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     if (!user) return;
 
     try {
-      const res = await fetch("http://localhost:8000/api/portfolio/save", {
+      const res = await fetch("${API_URL}/api/portfolio/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -155,9 +151,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     const checkSaved = async () => {
       if (!user || !githubData?.username) return;
 
-      const res = await fetch(
-        `http://localhost:8000/api/portfolio/${user._id}`,
-      );
+      const res = await fetch(`${API_URL}/api/portfolio/${user._id}`);
 
       const data = await res.json();
 
