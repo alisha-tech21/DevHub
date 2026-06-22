@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const ProfilePage = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { user, setUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [savedGithubUser, setSavedGithubUser] = useState(null); // New state for persistence
@@ -26,9 +27,7 @@ const ProfilePage = () => {
     const fetchSavedPortfolio = async () => {
       if (!user?._id) return;
       try {
-        const res = await fetch(
-          `http://localhost:8000/api/portfolio/${user._id}`,
-        );
+        const res = await fetch(`${API_URL}/api/portfolio/${user._id}`);
         const data = await res.json();
         if (data && data.githubUsername) {
           setSavedGithubUser(data.githubUsername);
@@ -59,15 +58,12 @@ const ProfilePage = () => {
           .map((tech) => tech.trim())
           .filter(Boolean),
       };
-      const res = await fetch(
-        `http://localhost:8000/api/user/update/${user._id}`,
-        {
-          method: "PUT",
-          headers: getAuthHeaders(),
+      const res = await fetch(`${API_URL}/api/user/update/${user._id}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
 
-          body: JSON.stringify(payload),
-        },
-      );
+        body: JSON.stringify(payload),
+      });
       if (!res.ok) throw new Error("Update failed");
       const data = await res.json();
       const updatedUser = {
@@ -91,14 +87,14 @@ const ProfilePage = () => {
     formDataObj.append("image", file);
 
     try {
-      const uploadRes = await fetch("http://localhost:8000/api/upload", {
+      const uploadRes = await fetch("${API_URL}/api/upload", {
         method: "POST",
         body: formDataObj,
       });
       const uploadData = await uploadRes.json();
       if (uploadData.imageUrl) {
         const updateRes = await fetch(
-          `http://localhost:8000/api/user/update/${user._id}`,
+          `${API_URL}/api/user/update/${user._id}`,
           {
             method: "PUT",
             headers: getAuthHeaders(),
