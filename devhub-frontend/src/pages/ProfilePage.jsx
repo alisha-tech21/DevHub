@@ -87,7 +87,7 @@ const ProfilePage = () => {
     formDataObj.append("image", file);
 
     try {
-      const uploadRes = await fetch("${API_URL}/api/upload", {
+      const uploadRes = await fetch(`${API_URL}/api/upload`, {
         method: "POST",
         body: formDataObj,
       });
