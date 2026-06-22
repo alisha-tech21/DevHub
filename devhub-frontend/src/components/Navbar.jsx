@@ -17,7 +17,7 @@ function Navbar() {
   const [allBlogs, setAllBlogs] = useState([]);
 
   useEffect(() => {
-    fetch("${API_URL}/api/blogs")
+    fetch(`${API_URL}/api/blogs`)
       .then((res) => res.json())
       .then((data) => setAllBlogs(data.data))
       .catch((err) => console.error(err));
