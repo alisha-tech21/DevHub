@@ -7,13 +7,12 @@ function BlogLayout({
   onSubscribe,
 }) {
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
   const [trendingTags, setTrendingTags] = useState([]);
   useEffect(() => {
     const fetchTrendingTags = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:8000/api/blogs/trending-tags",
-        );
+        const res = await fetch("${API_URL}/api/blogs/trending-tags");
         const data = await res.json();
 
         if (data.success) {
