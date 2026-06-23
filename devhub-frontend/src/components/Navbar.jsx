@@ -47,6 +47,9 @@ function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [mobileMenu]);
+  useEffect(() => {
+  setMobileMenu(false);
+}, [location.pathname]);
   return (
     <>
       <nav className="bg-[#000000] text-white w-full px-4 sm:px-6 md:px-12 py-4 flex items-center justify-between border-b border-neutral-900 sticky top-0 z-[100]">
@@ -225,16 +228,16 @@ function Navbar() {
           className="md:hidden absolute top-16 left-0 w-full bg-black border-b border-neutral-800 flex flex-col items-start gap-4 p-5 z-50"
         >
           {" "}
-          <Link to="/" className="text-white">
+          <Link to="/" className="text-white onClick={() => setMobileMenu(false)}">
             Home
           </Link>
-          <Link to="/blogs" className="text-white">
+          <Link to="/blogs" className="text-white onClick={() => setMobileMenu(false)}">
             Blog
           </Link>
-          <Link to="/portfolio" className="text-white">
+          <Link to="/portfolio" className="text-white onClick={() => setMobileMenu(false)}">
             My Portfolio
           </Link>
-          <Link to="/write" className="text-white">
+          <Link to="/write" className="text-white onClick={() => setMobileMenu(false)}">
             Write
           </Link>
         </div>
