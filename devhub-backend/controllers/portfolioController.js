@@ -1,4 +1,4 @@
-const axios = require("axios");
+const githubApi = require("../utils/githubApi");
 const User = require("../models/User");
 const Portfolio = require("../models/Portfolio");
 
@@ -18,11 +18,9 @@ exports.getGithubPortfolio = async (req, res) => {
     }
     // 2. GitHub se data fetch karein
     const [userRes, reposRes, eventsRes] = await Promise.allSettled([
-      axios.get(`https://api.github.com/users/${username}`),
-      axios.get(`https://api.github.com/users/${username}/repos?per_page=100`),
-      axios.get(
-        `https://api.github.com/users/${username}/events/public?per_page=10`,
-      ),
+      githubApi.get(`/users/${username}`),
+      githubApi.get(`/users/${username}/repos?per_page=100`),
+      githubApi.get(`/users/${username}/events/public?per_page=10`),
     ]);
 
     // Agar user hi nahi mila toh 404 bhejein
