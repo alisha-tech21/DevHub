@@ -9,8 +9,38 @@ exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
+
     if (userExists) {
-      return res.status(400).json({ message: "Email is already registered" });
+      // Agar account verify ho chuka hai
+      if (userExists.isVerified) {
+        return res.status(400).json({
+          message: "Email is already registered",
+        });
+      }
+
+      // Agar account verify nahi hua
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      userExists.otp = otp;
+      userExists.otpExpires = Date.now() + 3 * 60 * 1000;
+
+      await userExists.save();
+
+      console.log("Resending OTP to:", email);
+
+      try {
+        await sendEmail({ email, otp });
+
+        return res.status(200).json({
+          message: "New OTP sent to your email.",
+          email,
+        });
+      } catch (err) {
+        console.error("Resend OTP Error:", err);
+        return res.status(500).json({
+          message: "Failed to send OTP. Please try again.",
+        });
+      }
     }
 
     // 2. Hash Password
@@ -32,7 +62,12 @@ exports.registerUser = async (req, res) => {
     });
     console.log("Attempting to send email to:", email);
     // 5. Send OTP Email
-    await sendEmail({ email, otp });
+    try {
+      await sendEmail({ email, otp });
+    } catch (err) {
+      await User.findByIdAndDelete(user._id);
+      throw err;
+    }
     console.log("Email function executed successfully");
 
     res.status(201).json({
