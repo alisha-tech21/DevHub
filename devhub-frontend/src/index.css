@@ -120,3 +120,7 @@ html {
   background: #444 !important;
   border-radius: 4px !important;
 }
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}

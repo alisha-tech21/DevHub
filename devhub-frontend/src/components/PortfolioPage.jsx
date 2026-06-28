@@ -12,8 +12,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { useReactToPrint } from "react-to-print";
 
 const StatCard = ({ title, value, icon }) => (
   <div className="bg-[#05070B] border border-neutral-500 p-4 text-center min-w-[100px] transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10 cursor-pointer">
@@ -52,6 +51,10 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
+  const handleDownload = useReactToPrint({
+    contentRef: portfolioRef,
+    documentTitle: `${githubData?.username || "portfolio"}-portfolio`,
+  });
   const handleScrollToSearch = () => {
     const searchBar = document.getElementById("search-bar");
     if (searchBar) {
@@ -75,33 +78,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     };
     loadSavedPortfolio();
   }, [user, githubData, onFetchGithub]);
-  const handleMessage = async () => {
-    try {
-      const githubUsername = githubData?.username || savedGithubUser;
 
-      console.log("Sending username:", githubUsername);
-
-      const res = await fetch(`${API_URL}/api/github/${githubUsername}`);
-
-      const data = await res.json();
-
-      if (!data.ownerEmail) {
-        toast.error("This user is not linked to a DevHub account.", {
-          style: {
-            background: "#171717",
-            color: "#fff",
-            border: "1px solid #404040",
-          },
-        });
-        return;
-      }
-
-      window.location.href = `mailto:${data.ownerEmail}`;
-    } catch (err) {
-      console.error(err);
-      toast.error("Message failed");
-    }
-  };
   const saveMyPortfolio = async () => {
     if (!user) return;
 
@@ -145,43 +122,6 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     }
   };
 
-  const handleDownload = async () => {
-    try {
-      const element = portfolioRef.current;
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#000000",
-        scrollY: -window.scrollY,
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-
-      pdf.save(`${githubData.username}-portfolio.pdf`);
-    } catch (err) {
-      console.error(err);
-
-      toast.error("Failed to download PDF", {
-        style: {
-          background: "#171717",
-          color: "#fff",
-          border: "1px solid #404040",
-        },
-      });
-    }
-  };
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center text-cyan-500 font-bold">
@@ -233,205 +173,207 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     checkSaved();
   }, [user, githubData]);
   return (
-    <motion.div
-      ref={portfolioRef}
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: "easeOut" }}
-      className="bg-black min-h-screen text-white px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative"
-    >
-      <Toaster position="bottom-right" />
-      <div className="max-w-7xl mx-auto">
-        {/* TOP SECTION */}
-        <div className="border border-neutral-500 bg-[#05070B] p-6 mb-6">
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
-            {" "}
-            <img
-              src={githubData.avatar}
-              alt="Profile"
-              className="w-28 h-28 sm:w-36 sm:h-36 lg:w-45 lg:h-45 object-cover border border-neutral-700"
-            />
-            <div className="flex-1">
-              <h1 className="text-4xl mt-2 font-bold">{githubData.name}</h1>
-              <p className="text-neutral-400 mt-3 text-sm leading-6 max-w-xl">
-                {githubData.bio || "No bio available"}
-              </p>
-              <div className="flex gap-3 mt-8">
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://github.com/${githubData.username}`,
-                      "_blank",
-                    )
-                  }
-                  className="bg-cyan-600 hover:bg-cyan-700 hover:scale-105 hover:shadow-lg transition-all duration-300 text-white px-6 py-2 text-sm font-bold cursor-pointer"
-                >
-                  Follow
-                </button>
-
-                {/* Save Logic Button */}
-                {user && (
+    <div ref={portfolioRef}>
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+        className="bg-black min-h-screen text-white px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative"
+      >
+        <Toaster position="bottom-right" />
+        <div className="max-w-7xl mx-auto">
+          {/* TOP SECTION */}
+          <div className="border border-neutral-500 bg-[#05070B] p-6 mb-6">
+            <div className="flex flex-col lg:flex-row gap-8 items-start">
+              {" "}
+              <img
+                src={githubData.avatar}
+                alt="Profile"
+                className="w-28 h-28 sm:w-36 sm:h-36 lg:w-45 lg:h-45 object-cover border border-neutral-700"
+              />
+              <div className="flex-1">
+                <h1 className="text-4xl mt-2 font-bold">{githubData.name}</h1>
+                <p className="text-neutral-400 mt-3 text-sm leading-6 max-w-xl">
+                  {githubData.bio || "No bio available"}
+                </p>
+                <div className="flex gap-3 mt-8">
                   <button
-                    onClick={saveMyPortfolio}
-                    disabled={isSaved}
-                    className={`border px-6 py-2 text-sm font-bold rounded-md transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer ${
-                      isSaved
-                        ? "bg-green-600 border-green-600 cursor-not-allowed"
-                        : "border-indigo-500 hover:bg-indigo-600 hover:shadow-indigo-500/30"
+                    onClick={() =>
+                      window.open(
+                        `https://github.com/${githubData.username}`,
+                        "_blank",
+                      )
+                    }
+                    className="bg-cyan-600 hover:bg-cyan-700 hover:scale-105 hover:shadow-lg transition-all duration-300 text-white px-6 py-2 text-sm font-bold cursor-pointer"
+                  >
+                    Follow
+                  </button>
+
+                  {/* Save Logic Button */}
+                  {user && (
+                    <button
+                      onClick={saveMyPortfolio}
+                      disabled={isSaved}
+                      className={`border px-6 py-2 text-sm font-bold rounded-md transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer ${
+                        isSaved
+                          ? "bg-green-600 border-green-600 cursor-not-allowed"
+                          : "border-indigo-500 hover:bg-indigo-600 hover:shadow-indigo-500/30"
+                      }`}
+                    >
+                      {isSaved ? "Saved ✓" : "Save as My Portfolio"}
+                    </button>
+                  )}
+
+                  {/* Message Button */}
+                  <button
+                    onClick={() => {
+                      // Login nahi hai
+                      if (!user) {
+                        navigate("/login", {
+                          state: { from: window.location.pathname },
+                        });
+                        return;
+                      }
+
+                      if (githubData?.ownerEmail) {
+                        window.location.href = `mailto:${githubData.ownerEmail}`;
+                      }
+                    }}
+                    disabled={user && !githubData?.ownerEmail}
+                    className={`px-6 py-2 text-sm rounded-md transition-all duration-300 ${
+                      user && !githubData?.ownerEmail
+                        ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                        : "border border-neutral-500 text-white hover:bg-neutral-800 hover:scale-105 cursor-pointer"
                     }`}
                   >
-                    {isSaved ? "Saved ✓" : "Save as My Portfolio"}
+                    {user
+                      ? githubData?.ownerEmail
+                        ? "Message"
+                        : "Not on DevHub"
+                      : "Message"}
                   </button>
-                )}
-
-                {/* Message Button */}
-                <button
-                  onClick={() => {
-                    // Login nahi hai
-                    if (!user) {
-                      navigate("/login", {
-                        state: { from: window.location.pathname },
-                      });
-                      return;
-                    }
-
-                    if (githubData?.ownerEmail) {
-                      window.location.href = `mailto:${githubData.ownerEmail}`;
-                    }
-                  }}
-                  disabled={user && !githubData?.ownerEmail}
-                  className={`px-6 py-2 text-sm rounded-md transition-all duration-300 ${
-                    user && !githubData?.ownerEmail
-                      ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
-                      : "border border-neutral-500 text-white hover:bg-neutral-800 hover:scale-105 cursor-pointer"
-                  }`}
-                >
-                  {user
-                    ? githubData?.ownerEmail
-                      ? "Message"
-                      : "Not on DevHub"
-                    : "Message"}
-                </button>
-              </div>
-            </div>
-            <div className="ml-auto self-start flex flex-col items-end">
-              {/* Download + Share */}
-
-              <div className="flex gap-3 mb-10">
-                <button
-                  title="Download Portfolio (PDF)"
-                  onClick={handleDownload}
-                  className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
-                >
-                  <FaDownload />
-                </button>
-
-                <button
-                  title="Share Portfolio"
-                  onClick={handleShare}
-                  className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
-                >
-                  <FaShareAlt />
-                </button>
-              </div>
-
-              {/* Stats */}
-
-              <div className="flex gap-3">
-                <StatCard
-                  title="Stars"
-                  value={githubData.stars}
-                  icon={<FaStar size={14} />}
-                />
-
-                <StatCard
-                  title="Repos"
-                  value={githubData.publicRepos}
-                  icon={<FaCodeBranch size={14} />}
-                />
-
-                <StatCard
-                  title="Followers"
-                  value={githubData.followers}
-                  icon={<FaUsers size={14} />}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CONTENT GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="col-span-1 space-y-6 order-2 lg:order-1">
-            {" "}
-            <div className="bg-[#05070B] border border-neutral-500 p-5">
-              <h3 className="text-cyan-400 font-bold mb-5 text-sm">
-                TECH STACK
-              </h3>
-              <div className="flex flex-col gap-3">
-                {githubData.languages?.map((lang) => (
-                  <span
-                    key={lang}
-                    className="w-fit border border-neutral-400 px-3 py-1 text-sm transition-all duration-300 hover:border-cyan-500 hover:scale-105 hover:bg-neutral-900 hover:shadow-md"
-                  >
-                    {lang}
-                  </span>
-                ))}
-              </div>
-            </div>
-            {/* Activities Section */}
-            <div className="bg-[#05070B] border border-neutral-500 p-5">
-              <h3 className="text-cyan-400 font-bold mb-4 text-sm">
-                RECENT ACTIVITIES
-              </h3>
-              <div className="space-y-3">
-                {githubData.activities?.map((act, i) => (
-                  <div
-                    key={i}
-                    className="text-[11px] text-neutral-400 border-b border-neutral-500 pb-2"
-                  >
-                    {act.type} in <span className="text-white">{act.repo}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="col-span-1 lg:col-span-3 space-y-6 order-1 lg:order-2">
-            {" "}
-            <h2 className="text-2xl font-bold">Top Repositories</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {githubData.repos?.map((repo) => (
-                <div
-                  key={repo.name}
-                  onClick={() => window.open(repo.url, "_blank")}
-                  className="bg-[#05070B] border border-neutral-500 p-5 cursor-pointer transition-all duration-300 hover:border-cyan-400 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/10"
-                >
-                  <h3 className="text-cyan-400 text-xl font-bold">
-                    {repo.name}
-                  </h3>
-                  <p className="text-neutral-400 mt-4 min-h-[60px] text-sm">
-                    {repo.description || "No description"}
-                  </p>
-                  <div className="flex items-center gap-4 mt-6 text-[11px] text-neutral-500">
-                    <span
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: getLangColor(repo.language) }}
-                    ></span>
-                    {repo.language || "N/A"}
-                    <div>{getRelativeTime(repo.updated_at)}</div>
-                  </div>
                 </div>
-              ))}
+              </div>
+              <div className="ml-auto self-start flex flex-col items-end">
+                {/* Download + Share */}
+
+                <div className="flex gap-3 mb-10 print:hidden">
+                  <button
+                    title="Download Portfolio (PDF)"
+                    onClick={handleDownload}
+                    className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
+                  >
+                    <FaDownload />
+                  </button>
+
+                  <button
+                    title="Share Portfolio"
+                    onClick={handleShare}
+                    className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
+                  >
+                    <FaShareAlt />
+                  </button>
+                </div>
+
+                {/* Stats */}
+
+                <div className="flex gap-3">
+                  <StatCard
+                    title="Stars"
+                    value={githubData.stars}
+                    icon={<FaStar size={14} />}
+                  />
+
+                  <StatCard
+                    title="Repos"
+                    value={githubData.publicRepos}
+                    icon={<FaCodeBranch size={14} />}
+                  />
+
+                  <StatCard
+                    title="Followers"
+                    value={githubData.followers}
+                    icon={<FaUsers size={14} />}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="bg-[#05070B] border border-neutral-500 p-6">
-              <h2 className="text-xl font-bold mb-4">Annual Contributions</h2>
-              <GitHubCalendar username={githubData.username} />
+          </div>
+
+          {/* CONTENT GRID */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="col-span-1 space-y-6 order-2 lg:order-1">
+              {" "}
+              <div className="bg-[#05070B] border border-neutral-500 p-5">
+                <h3 className="text-cyan-400 font-bold mb-5 text-sm">
+                  TECH STACK
+                </h3>
+                <div className="flex flex-col gap-3">
+                  {githubData.languages?.map((lang) => (
+                    <span
+                      key={lang}
+                      className="w-fit border border-neutral-400 px-3 py-1 text-sm transition-all duration-300 hover:border-cyan-500 hover:scale-105 hover:bg-neutral-900 hover:shadow-md"
+                    >
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              {/* Activities Section */}
+              <div className="bg-[#05070B] border border-neutral-500 p-5">
+                <h3 className="text-cyan-400 font-bold mb-4 text-sm">
+                  RECENT ACTIVITIES
+                </h3>
+                <div className="space-y-3">
+                  {githubData.activities?.map((act, i) => (
+                    <div
+                      key={i}
+                      className="text-[11px] text-neutral-400 border-b border-neutral-500 pb-2"
+                    >
+                      {act.type} in{" "}
+                      <span className="text-white">{act.repo}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-span-1 lg:col-span-3 space-y-6 order-1 lg:order-2">
+              {" "}
+              <h2 className="text-2xl font-bold">Top Repositories</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {githubData.repos?.map((repo) => (
+                  <div
+                    key={repo.name}
+                    onClick={() => window.open(repo.url, "_blank")}
+                    className="bg-[#05070B] border border-neutral-500 p-5 cursor-pointer transition-all duration-300 hover:border-cyan-400 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/10"
+                  >
+                    <h3 className="text-cyan-400 text-xl font-bold">
+                      {repo.name}
+                    </h3>
+                    <p className="text-neutral-400 mt-4 min-h-[60px] text-sm">
+                      {repo.description || "No description"}
+                    </p>
+                    <div className="flex items-center gap-4 mt-6 text-[11px] text-neutral-500">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: getLangColor(repo.language) }}
+                      ></span>
+                      {repo.language || "N/A"}
+                      <div>{getRelativeTime(repo.updated_at)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-[#05070B] border border-neutral-500 p-6">
+                <h2 className="text-xl font-bold mb-4">Annual Contributions</h2>
+                <GitHubCalendar username={githubData.username} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
