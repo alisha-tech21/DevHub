@@ -6,15 +6,14 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-// Components & Pages Import
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home"; // Humne Home ko pages/Home se import kiya
+import Home from "./pages/Home";
 import BlogPage from "./components/BlogPage";
 import PortfolioPage from "./components/PortfolioPage";
 import WritePage from "./components/WritePage";
 import FooterSection from "./components/FooterSection";
 import BlogLayout from "./components/BlogLayout";
-import BlogGrid from "./components/BlogGrid"; // Filter logic ke liye
+import BlogGrid from "./components/BlogGrid";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,7 +31,6 @@ function AppContent() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const navigate = useNavigate();
 
-  // Sabhi original logic wahi hai
   const fetchFilteredBlogs = async (tags) => {
     try {
       const query = tags.length > 0 ? `?tag=${tags.join(",")}` : "";
@@ -124,7 +122,7 @@ function AppContent() {
               ) : (
                 <PortfolioPage
                   githubData={githubData}
-                  onFetchGithub={handleFetchGithub} // Ye zaroori hai
+                  onFetchGithub={handleFetchGithub}
                 />
               )
             }
@@ -137,7 +135,7 @@ function AppContent() {
           <Route path="/blogs/:id" element={<BlogPage />} />
         </Routes>
       </main>
-      <FooterSection /> {/* Footer yahan rehne dein */}
+      <FooterSection />
     </div>
   );
 }

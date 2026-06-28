@@ -13,7 +13,7 @@ const CodeBlock = ({ code, language }) => {
 
   return (
     <div className="my-6 rounded-lg overflow-hidden border border-neutral-800 bg-[#09090B]">
-      {/* HEADER: Language aur Button */}
+      {/* HEADER */}
       <div className="flex justify-between items-center px-4 py-2 border-b border-neutral-800 bg-[#121316]">
         <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
           {language || "code"}

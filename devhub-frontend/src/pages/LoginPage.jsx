@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState({});
-  const [timer, setTimer] = useState(180); // 10 minutes in seconds
+  const [timer, setTimer] = useState(180);
   const location = useLocation();
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ const LoginPage = () => {
     } else if (location.pathname === "/login") {
       setIsLogin(true);
     }
-    // Agar location.state mein mode aayega, usay bhi handle karein
     if (location.state?.mode === "signup") setIsLogin(false);
   }, [location.pathname, location.state]);
   const handleAuth = async (e) => {
@@ -109,7 +108,6 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#050505]">
       <Toaster position="bottom-center" />
       <div className="w-full max-w-[400px] mx-4 bg-[#0A0A0A] border border-neutral-800 p-5 sm:p-8 rounded-2xl shadow-2xl">
-        {/* Web Name Added */}
         <div className="flex justify-center mb-6">
           <h1 className="text-indigo-500 font-bold text-2xl tracking-[0.2em] uppercase cursor-pointer">
             DevHub

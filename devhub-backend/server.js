@@ -48,7 +48,6 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/github", githubRoutes);
 app.use("/api/portfolio", require("./routes/portfolioRoutes"));
 
-// Image Upload Route (Yahan 'upload' middleware zaroori hai)
 app.post("/api/upload", upload.single("image"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   res.json({ imageUrl: req.file.path });

@@ -6,7 +6,6 @@ exports.getGithubPortfolio = async (req, res) => {
   try {
     const { username } = req.params;
 
-    // 1. Database se user email dhundein
     const portfolio = await Portfolio.findOne({
       githubUsername: username,
     }).populate("userId");
@@ -16,14 +15,13 @@ exports.getGithubPortfolio = async (req, res) => {
     if (portfolio && portfolio.userId) {
       ownerEmail = portfolio.userId.email;
     }
-    // 2. GitHub se data fetch karein
+    // 2. GitHub se data fetch
     const [userRes, reposRes, eventsRes] = await Promise.allSettled([
       githubApi.get(`/users/${username}`),
       githubApi.get(`/users/${username}/repos?per_page=100`),
       githubApi.get(`/users/${username}/events/public?per_page=10`),
     ]);
 
-    // Agar user hi nahi mila toh 404 bhejein
     if (userRes.status === "rejected" || !userRes.value?.data) {
       return res.status(404).json({ message: "GitHub user not found" });
     }
@@ -52,7 +50,6 @@ exports.getGithubPortfolio = async (req, res) => {
       if (uniqueActivities.length === 3) break;
     }
 
-    // 3. Final Response bhejein
     res.json({
       name: userData.name || userData.login,
       username: userData.login,
@@ -92,7 +89,7 @@ exports.savePortfolio = async (req, res) => {
   }
 };
 
-// Portfolio Fetch karna
+// Portfolio Fetch
 exports.getPortfolio = async (req, res) => {
   try {
     const portfolio = await Portfolio.findOne({ userId: req.params.userId });

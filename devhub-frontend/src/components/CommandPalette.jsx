@@ -14,12 +14,11 @@ function CommandPalette({ isOpen, onClose, blogs = [] }) {
   }, [query, blogs]);
 
   const handleSelect = (blog) => {
-    if (!blog?._id) return; // 🔥 safety check
+    if (!blog?._id) return;
 
     onClose();
     setQuery("");
 
-    // 🔥 FIX: correct navigation
     navigate(`/blogs/${blog._id}`);
   };
 
@@ -61,7 +60,7 @@ z-[9999]
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && filteredBlogs.length > 0) {
-              handleSelect(filteredBlogs[0]); // first result
+              handleSelect(filteredBlogs[0]);
             }
 
             if (e.key === "Escape") {

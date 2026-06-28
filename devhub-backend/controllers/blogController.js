@@ -14,12 +14,10 @@ exports.getBlogById = async (req, res) => {
   }
 };
 
-// @desc    Create a new blog article
+//    Create a new blog article
 exports.createBlog = async (req, res) => {
   try {
     const { title, content, tags, readTime, imageUrl } = req.body;
-
-    // Auth middleware se milne wali user ID ka use karein
     const authorId = req.user.id;
 
     const blog = await Blog.create({
@@ -28,7 +26,7 @@ exports.createBlog = async (req, res) => {
       tags,
       readTime,
       imageUrl: imageUrl || "https://via.placeholder.com/800",
-      author: authorId, // <--- Yahan se ID secure hogi
+      author: authorId,
     });
 
     res.status(201).json({ success: true, data: blog });
@@ -37,7 +35,7 @@ exports.createBlog = async (req, res) => {
   }
 };
 
-// @desc    Get all blogs for the home timeline
+//     Get all blogs for the home timeline
 exports.getAllBlogs = async (req, res) => {
   try {
     const { tag } = req.query;

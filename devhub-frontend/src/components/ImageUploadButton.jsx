@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaImage, FaChevronDown } from "react-icons/fa";
 
 export const ImageUploadButton = ({ editor }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
-
+  const dropdownRef = useRef(null);
   const addImage = async (file) => {
     if (!editor) {
       console.error("Editor instance not found!");
@@ -31,9 +31,22 @@ export const ImageUploadButton = ({ editor }) => {
       alert("Image upload failed. Check backend.");
     }
   };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative overflow-visible">
+    <div ref={dropdownRef} className="relative overflow-visible">
       {" "}
       <button
         type="button"

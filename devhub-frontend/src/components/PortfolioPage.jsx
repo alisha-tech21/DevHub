@@ -130,7 +130,6 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         <h2 className="text-3xl font-bold text-white mb-3">
           No Portfolio Data
         </h2>
-        {/* Yeh line wapas add kar dein jo design mein thi */}
         <p className="text-neutral-400 mb-6 text-center max-w-sm">
           It looks like you haven't searched for a GitHub profile or saved one
           yet.
@@ -215,11 +214,10 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                   </button>
                 )}
 
-                {/* Message Button - Hamesha clickable */}
+                {/* Message Button */}
                 <button
                   onClick={() => {
                     if (!user) {
-                      // Not logged in → redirect to login with return path
                       navigate("/login", {
                         state: { from: window.location.pathname },
                       });

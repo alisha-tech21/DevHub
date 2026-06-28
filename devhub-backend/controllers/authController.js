@@ -11,14 +11,12 @@ exports.registerUser = async (req, res) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      // Agar account verify ho chuka hai
       if (userExists.isVerified) {
         return res.status(400).json({
           message: "Email is already registered",
         });
       }
 
-      // Agar account verify nahi hua
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
       userExists.otp = otp;
@@ -51,7 +49,7 @@ exports.registerUser = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpires = Date.now() + 3 * 60 * 1000;
 
-    // 4. Create User (isVerified: false rakhna zaroori hai)
+    // 4. Create User
     const user = await User.create({
       name,
       email,

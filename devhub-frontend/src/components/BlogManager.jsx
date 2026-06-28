@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import BlogGrid from "./BlogGrid"; // Aapka purana grid component
-import BlogPage from "./BlogPage"; // Aapka single blog component
+import BlogGrid from "./BlogGrid";
+import BlogPage from "./BlogPage";
 
 function BlogManager({ blogs }) {
-  const [view, setView] = useState("grid"); // 'grid' ya 'post'
+  const [view, setView] = useState("grid");
   const [activeBlog, setActiveBlog] = useState(null);
 
   const handleBlogClick = (blog) => {

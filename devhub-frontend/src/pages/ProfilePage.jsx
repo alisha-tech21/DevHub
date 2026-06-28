@@ -5,7 +5,7 @@ const ProfilePage = () => {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user, setUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [savedGithubUser, setSavedGithubUser] = useState(null); // New state for persistence
+  const [savedGithubUser, setSavedGithubUser] = useState(null);
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -22,7 +22,7 @@ const ProfilePage = () => {
       });
     }
   }, [user]);
-  // 1. Fetch saved portfolio on component mount
+
   useEffect(() => {
     const fetchSavedPortfolio = async () => {
       if (!user?._id) return;
@@ -39,7 +39,6 @@ const ProfilePage = () => {
     fetchSavedPortfolio();
   }, [user?._id]);
 
-  // Helper to get Headers
   const getAuthHeaders = () => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
     return {

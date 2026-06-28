@@ -90,7 +90,7 @@ function WritePage() {
       }),
       TextStyle,
       FontSize,
-      CodeBlockLowlight.configure({ lowlight }), // <--- Ye colorful banayega
+      CodeBlockLowlight.configure({ lowlight }),
       Image.configure({ inline: true, allowBase64: true }),
       CharacterCount.configure({ limit: 10000 }),
       TextAlign.configure({ types: ["heading", "paragraph", "image"] }),
@@ -118,9 +118,7 @@ function WritePage() {
   useEffect(() => {
     if (!editor) return;
 
-    // 1. Editor ka content update hone ke baad
     const timer = setTimeout(() => {
-      // Ye preview container mein jitne bhi pre code hain unhe highlight karega
       hljs.highlightAll();
     }, 100);
 
@@ -160,14 +158,11 @@ function WritePage() {
   };
 
   const publishBlog = async () => {
-    // 1. Auth Gatekeeper
     if (!user || !user.token) {
-      // User ko login page par bhej dein, sath mein ek state bhej dein
-      // taake login page ko pata chale ki user kahan se aa raha hai
       navigate("/login", {
         state: {
           from: "/write",
-          message: "Please sign in to publish your blog.", // Ye message hum login page par dikha sakte hain
+          message: "Please sign in to publish your blog.",
         },
       });
       return;
@@ -176,7 +171,7 @@ function WritePage() {
     if (!title) return toast.error("Title required!");
 
     setIsPublishing(true);
-    setStatus("publishing"); // Status set karein
+    setStatus("publishing");
 
     try {
       const htmlContent = editor.getHTML();
@@ -187,7 +182,7 @@ function WritePage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.token}`, // Token format verify karein
+          Authorization: `Bearer ${user?.token}`,
         },
         body: JSON.stringify({
           title: title.replace("# ", ""),
@@ -199,7 +194,7 @@ function WritePage() {
 
       if (response.ok) {
         setStatus("success");
-        toast.success("Published successfully!"); // Success ka chhota sa toast
+        toast.success("Published successfully!");
 
         // UI/Storage Reset
         localStorage.removeItem("blog-content");
@@ -262,7 +257,7 @@ function WritePage() {
           </button>
           <button
             className="cursor-pointer hover:text-white transition-colors"
-            onClick={() => editor?.chain().focus().toggleCodeBlock().run()} // <--- toggleCode() ki jagah toggleCodeBlock()
+            onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
           >
             <FaCode />
           </button>
@@ -295,7 +290,6 @@ function WritePage() {
                 if (size === "default") {
                   editor.chain().focus().unsetFontSize().run();
                 } else {
-                  // Ye Tiptap ki command hai jo sirf selected text par kaam karti hai
                   editor
                     .chain()
                     .focus()

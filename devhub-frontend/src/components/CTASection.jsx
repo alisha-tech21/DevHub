@@ -6,12 +6,10 @@ function CTASection() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  // CTASection.jsx mein ye update karein:
   const handleGetStarted = () => {
     if (user) {
       navigate("/write");
     } else {
-      // Current location pass kar rahe hain taake login ke baad wapas aa saken
       navigate("/login", { state: { from: { pathname: "/" } } });
     }
   };

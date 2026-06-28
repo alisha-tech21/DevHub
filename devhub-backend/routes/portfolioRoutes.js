@@ -6,7 +6,6 @@ const {
   getGithubPortfolio,
 } = require("../controllers/portfolioController");
 
-// Ab route directly controller se data fetch karega
 router.post("/save", savePortfolio);
 router.get("/github/:username", getGithubPortfolio);
 router.get("/:userId", getPortfolio);

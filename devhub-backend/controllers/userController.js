@@ -25,6 +25,5 @@ exports.uploadAvatar = (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
-  // Cloudinary se mili hui path URL bhej rahe hain
   res.status(200).json({ imageUrl: req.file.path });
 };

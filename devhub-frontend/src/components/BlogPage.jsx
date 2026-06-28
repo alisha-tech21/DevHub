@@ -67,11 +67,9 @@ function BlogPage() {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
 
-    // 🔥 FIX: convert fake headings into real h2
     tempDiv.querySelectorAll("code").forEach((el) => {
       const text = el.innerText;
 
-      // treat as heading if it's in list format
       if (text.length < 60) {
         const h2 = document.createElement("h2");
         h2.innerText = text;

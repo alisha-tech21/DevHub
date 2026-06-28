@@ -48,8 +48,25 @@ function Navbar() {
     };
   }, [mobileMenu]);
   useEffect(() => {
-  setMobileMenu(false);
-}, [location.pathname]);
+    setMobileMenu(false);
+  }, [location.pathname]);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showDropdown &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
   return (
     <>
       <nav className="bg-[#000000] text-white w-full px-4 sm:px-6 md:px-12 py-4 flex items-center justify-between border-b border-neutral-900 sticky top-0 z-[100]">
@@ -83,10 +100,7 @@ function Navbar() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div
-          className="flex items-center gap-4 text-gray-500"
-          ref={dropdownRef}
-        >
+        <div className="flex items-center gap-4 text-gray-500">
           <div className="relative">
             <button
               onClick={() => setPaletteOpen(true)}
@@ -158,7 +172,7 @@ function Navbar() {
 
           {/* 🔥 IF USER LOGGED IN */}
           {user && (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <img
                 src={
                   user?.avatar ||
@@ -202,6 +216,7 @@ function Navbar() {
 
                     <Link
                       to="/portfolio"
+                      onClick={() => setShowDropdown(false)}
                       className="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 hover:text-white"
                     >
                       My Portfolio
@@ -210,7 +225,10 @@ function Navbar() {
                     <div className="border-t border-neutral-800 my-2"></div>
 
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        setShowDropdown(false);
+                        logout();
+                      }}
                       className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-neutral-800"
                     >
                       Sign out
@@ -228,16 +246,32 @@ function Navbar() {
           className="md:hidden absolute top-16 left-0 w-full bg-black border-b border-neutral-800 flex flex-col items-start gap-4 p-5 z-50"
         >
           {" "}
-          <Link to="/" className="text-white onClick={() => setMobileMenu(false)}">
+          <Link
+            to="/"
+            className="text-white"
+            onClick={() => setMobileMenu(false)}
+          >
             Home
           </Link>
-          <Link to="/blogs" className="text-white onClick={() => setMobileMenu(false)}">
+          <Link
+            to="/blogs"
+            className="text-white"
+            onClick={() => setMobileMenu(false)}
+          >
             Blog
           </Link>
-          <Link to="/portfolio" className="text-white onClick={() => setMobileMenu(false)}">
+          <Link
+            to="/portfolio"
+            className="text-white"
+            onClick={() => setMobileMenu(false)}
+          >
             My Portfolio
           </Link>
-          <Link to="/write" className="text-white onClick={() => setMobileMenu(false)}">
+          <Link
+            to="/write"
+            className="text-white"
+            onClick={() => setMobileMenu(false)}
+          >
             Write
           </Link>
         </div>

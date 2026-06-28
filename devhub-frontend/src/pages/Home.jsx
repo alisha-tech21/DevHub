@@ -17,7 +17,6 @@ function Home({ onFetchGithub, loading }) {
 
   return (
     <div className="bg-black min-h-screen">
-      {/* HeroSection ko direct onFetchGithub mil raha hai */}
       <HeroSection onGenerate={onFetchGithub} loading={loading} />
 
       <section className="max-w-7xl mx-auto px-6 py-12">

@@ -5,7 +5,7 @@ const {
   getBlogById,
   createBlog,
   getTrendingTags,
-} = require("../controllers/blogController"); // Controller import karein
+} = require("../controllers/blogController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/trending-tags", getTrendingTags);

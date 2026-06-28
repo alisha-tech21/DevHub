@@ -95,13 +95,11 @@ function BlogLayout({
           <input
             type="email"
             placeholder="dev@example.com"
-            onChange={(e) => {
-              // Subscribe ke liye yahan email state capture karein
-            }}
+            onChange={(e) => {}}
             className="w-full bg-black border border-neutral-700 p-2 mb-2 text-sm text-white"
           />
           <button
-            onClick={onSubscribe} // Subscribe trigger
+            onClick={onSubscribe}
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-sm font-medium transition-colors"
           >
             Subscribe
