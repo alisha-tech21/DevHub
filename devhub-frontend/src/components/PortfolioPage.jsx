@@ -47,7 +47,6 @@ const getLangColor = (lang) => {
 };
 
 function PortfolioPage({ githubData, onFetchGithub, loading }) {
-  const [isSaved, setIsSaved] = useState(false);
   const portfolioRef = useRef(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
