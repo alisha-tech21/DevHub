@@ -1,6 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GitHubCalendar } from "react-github-calendar";
-import { FaStar, FaCodeBranch, FaUsers, FaSearch } from "react-icons/fa";
+import {
+  FaStar,
+  FaCodeBranch,
+  FaUsers,
+  FaSearch,
+  FaDownload,
+  FaShareAlt,
+} from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
@@ -113,6 +120,31 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
       toast.error("Failed to save portfolio.");
     }
   };
+  const handleShare = async () => {
+    const url = `https://github.com/${githubData.username}`;
+
+    if (navigator.share) {
+      await navigator.share({
+        title: `${githubData.name}'s Portfolio`,
+        text: "Check out this developer portfolio",
+        url,
+      });
+    } else {
+      await navigator.clipboard.writeText(url);
+
+      toast.success("Portfolio link copied!", {
+        style: {
+          background: "#171717",
+          color: "#fff",
+          border: "1px solid #404040",
+        },
+      });
+    }
+  };
+
+  const handleDownload = () => {
+    window.print();
+  };
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center text-cyan-500 font-bold">
@@ -174,7 +206,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
       <div className="max-w-7xl mx-auto">
         {/* TOP SECTION */}
         <div className="border border-neutral-500 bg-[#05070B] p-6 mb-6">
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+          <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-8 items-start">
             {" "}
             <img
               src={githubData.avatar}
@@ -215,8 +247,10 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                 )}
 
                 {/* Message Button */}
+                {/* Message Button */}
                 <button
                   onClick={() => {
+                    // Login nahi hai
                     if (!user) {
                       navigate("/login", {
                         state: { from: window.location.pathname },
@@ -224,28 +258,42 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                       return;
                     }
 
+                    // DevHub user hai
                     if (githubData?.ownerEmail) {
-                      // Email available → open mail client
                       window.location.href = `mailto:${githubData.ownerEmail}`;
-                    } else {
-                      // Logged in but no email linked
-                      toast.error(
-                        "This user is not registered on DevHub or has no email available.",
-                        {
-                          style: {
-                            background: "#171717",
-                            color: "#fff",
-                            border: "1px solid #404040",
-                          },
-                        },
-                      );
                     }
                   }}
-                  className="border border-neutral-500 px-6 py-2 text-sm text-white hover:bg-neutral-800 hover:scale-105 transition-all duration-300 rounded-md cursor-pointer"
+                  disabled={user && !githubData?.ownerEmail}
+                  className={`px-6 py-2 text-sm rounded-md transition-all duration-300 ${
+                    user && !githubData?.ownerEmail
+                      ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                      : "border border-neutral-500 text-white hover:bg-neutral-800 hover:scale-105 cursor-pointer"
+                  }`}
                 >
-                  Message
+                  {user
+                    ? githubData?.ownerEmail
+                      ? "Message"
+                      : "Not on DevHub"
+                    : "Message"}
                 </button>
               </div>
+            </div>
+            <div className="flex justify-end gap-3 w-full lg:w-auto mb-5">
+              <button
+                onClick={handleDownload}
+                className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 transition-all duration-300 flex items-center justify-center"
+                title="Download Portfolio"
+              >
+                <FaDownload className="text-lg" />
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 transition-all duration-300 flex items-center justify-center"
+                title="Share Portfolio"
+              >
+                <FaShareAlt className="text-lg" />
+              </button>
             </div>
             <div className="flex flex-wrap gap-3 mt-6 lg:mt-22">
               {" "}
