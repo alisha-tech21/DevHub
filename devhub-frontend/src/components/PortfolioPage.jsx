@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import {
   FaStar,
@@ -12,6 +12,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const StatCard = ({ title, value, icon }) => (
   <div className="bg-[#05070B] border border-neutral-500 p-4 text-center min-w-[100px] transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10 cursor-pointer">
@@ -45,6 +47,8 @@ const getLangColor = (lang) => {
 };
 
 function PortfolioPage({ githubData, onFetchGithub, loading }) {
+  const [isSaved, setIsSaved] = useState(false);
+  const portfolioRef = useRef(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
@@ -142,8 +146,42 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     }
   };
 
-  const handleDownload = () => {
-    window.print();
+  const handleDownload = async () => {
+    try {
+      const element = portfolioRef.current;
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#000000",
+        scrollY: -window.scrollY,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      pdf.save(`${githubData.username}-portfolio.pdf`);
+    } catch (err) {
+      console.error(err);
+
+      toast.error("Failed to download PDF", {
+        style: {
+          background: "#171717",
+          color: "#fff",
+          border: "1px solid #404040",
+        },
+      });
+    }
   };
   if (loading)
     return (
@@ -197,6 +235,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
   }, [user, githubData]);
   return (
     <motion.div
+      ref={portfolioRef}
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: "easeOut" }}
@@ -206,7 +245,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
       <div className="max-w-7xl mx-auto">
         {/* TOP SECTION */}
         <div className="border border-neutral-500 bg-[#05070B] p-6 mb-6">
-          <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-8 items-start">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
             {" "}
             <img
               src={githubData.avatar}
@@ -247,7 +286,6 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                 )}
 
                 {/* Message Button */}
-                {/* Message Button */}
                 <button
                   onClick={() => {
                     // Login nahi hai
@@ -258,7 +296,6 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                       return;
                     }
 
-                    // DevHub user hai
                     if (githubData?.ownerEmail) {
                       window.location.href = `mailto:${githubData.ownerEmail}`;
                     }
@@ -278,40 +315,48 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                 </button>
               </div>
             </div>
-            <div className="flex justify-end gap-3 w-full lg:w-auto mb-5">
-              <button
-                onClick={handleDownload}
-                className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 transition-all duration-300 flex items-center justify-center"
-                title="Download Portfolio"
-              >
-                <FaDownload className="text-lg" />
-              </button>
+            <div className="ml-auto self-start flex flex-col items-end">
+              {/* Download + Share */}
 
-              <button
-                onClick={handleShare}
-                className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 transition-all duration-300 flex items-center justify-center"
-                title="Share Portfolio"
-              >
-                <FaShareAlt className="text-lg" />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-3 mt-6 lg:mt-22">
-              {" "}
-              <StatCard
-                title="Stars"
-                value={githubData.stars}
-                icon={<FaStar size={14} />}
-              />
-              <StatCard
-                title="Repos"
-                value={githubData.publicRepos}
-                icon={<FaCodeBranch size={14} />}
-              />
-              <StatCard
-                title="Followers"
-                value={githubData.followers}
-                icon={<FaUsers size={14} />}
-              />
+              <div className="flex gap-3 mb-10">
+                <button
+                  title="Download Portfolio (PDF)"
+                  onClick={handleDownload}
+                  className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
+                >
+                  <FaDownload />
+                </button>
+
+                <button
+                  title="Share Portfolio"
+                  onClick={handleShare}
+                  className="w-11 h-11 rounded-lg border border-neutral-700 hover:border-cyan-500 hover:bg-neutral-900 flex items-center justify-center transition"
+                >
+                  <FaShareAlt />
+                </button>
+              </div>
+
+              {/* Stats */}
+
+              <div className="flex gap-3">
+                <StatCard
+                  title="Stars"
+                  value={githubData.stars}
+                  icon={<FaStar size={14} />}
+                />
+
+                <StatCard
+                  title="Repos"
+                  value={githubData.publicRepos}
+                  icon={<FaCodeBranch size={14} />}
+                />
+
+                <StatCard
+                  title="Followers"
+                  value={githubData.followers}
+                  icon={<FaUsers size={14} />}
+                />
+              </div>
             </div>
           </div>
         </div>
