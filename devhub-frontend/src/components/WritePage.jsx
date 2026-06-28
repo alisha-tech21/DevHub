@@ -226,8 +226,9 @@ function WritePage() {
   return (
     <div className="h-screen bg-[#0A0A0A] text-white flex flex-col overflow-hidden">
       {/* HEADER */}
-      <div className="sticky top-0 z-50 flex flex-col lg:flex-row lg:items-center justify-between px-4 sm:px-6 py-3 border-b border-neutral-800 bg-[#09090B] gap-3">
-        <div className="flex items-center gap-4 whitespace-nowrap overflow-x-auto overflow-y-visible">
+      <div className="sticky top-0 z-50 flex flex-col lg:flex-row lg:items-center justify-between px-4 sm:px-6 py-3 border-b border-neutral-800 bg-[#09090B] gap-3 overflow-visible">
+        {" "}
+        <div className="flex items-center gap-4 whitespace-nowrap lg:overflow-visible overflow-x-auto">
           {" "}
           <button
             className="cursor-pointer hover:text-white transition-colors"

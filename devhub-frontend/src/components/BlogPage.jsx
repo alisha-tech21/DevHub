@@ -138,7 +138,7 @@ function BlogPage() {
     <div className="bg-[#121316] min-h-screen text-white pt-10">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
         <article className="min-w-0">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight mb-1">
             {blog.title}
           </h1>
 

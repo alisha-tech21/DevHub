@@ -33,7 +33,8 @@ export const ImageUploadButton = ({ editor }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
+      {" "}
       <button
         type="button"
         onClick={() => setShowDropdown(!showDropdown)}
@@ -41,9 +42,8 @@ export const ImageUploadButton = ({ editor }) => {
       >
         <FaImage /> Insert Image <FaChevronDown size={10} />
       </button>
-
       {showDropdown && (
-        <div className="absolute top-full mt-2 left-0 bg-[#1a1a1a] border border-neutral-700 rounded-lg p-2 w-48 shadow-xl z-[9999]">
+        <div className="absolute left-0 top-full mt-2 z-[9999] bg-[#1a1a1a] border border-neutral-700 rounded-lg p-2 w-56 shadow-2xl">
           {" "}
           <label className="block p-2 hover:bg-neutral-800 cursor-pointer text-sm">
             Upload from Local File
