@@ -1,39 +1,28 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const sendEmail = async (options) => {
-  console.log("EMAIL_USER:", process.env.EMAIL_USER);
-  console.log("EMAIL_PASS Exists:", !!process.env.EMAIL_PASS);
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-    family: 4,
+const sendEmail = async ({ email, otp }) => {
+  console.log("Sending OTP to:", email);
 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-
-    connectionTimeout: 30000,
-    greetingTimeout: 30000,
-    socketTimeout: 30000,
-  });
-
-  await transporter.verify();
-  console.log("SMTP Connected Successfully");
-
-  const mailOptions = {
-    from: `"DevHub Support" <${process.env.EMAIL_USER}>`,
-    to: options.email,
+  const response = await resend.emails.send({
+    from: "DevHub <onboarding@resend.dev>",
+    to: email,
     subject: "Verify Your DevHub Account",
     html: `
-      <h2>Your OTP</h2>
-      <h1>${options.otp}</h1>
-    `,
-  };
+      <div style="font-family: Arial, sans-serif;">
+        <h2>Welcome to DevHub</h2>
 
-  await transporter.sendMail(mailOptions);
+        <p>Your verification OTP is:</p>
+
+        <h1 style="letter-spacing:6px">${otp}</h1>
+
+        <p>This OTP expires in 3 minutes.</p>
+      </div>
+    `,
+  });
+
+  console.log("Resend Response:", response);
 };
 
 module.exports = sendEmail;
