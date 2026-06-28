@@ -124,3 +124,56 @@ html {
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
+@media print {
+  body {
+    background: #000 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .bg-black {
+    background: #000 !important;
+  }
+
+  .bg-\[\#05070B\] {
+    background: #05070b !important;
+  }
+
+  .border {
+    border-color: #333 !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  button {
+    display: none !important;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .grid {
+    gap: 12px !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    page-break-after: avoid;
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+}
