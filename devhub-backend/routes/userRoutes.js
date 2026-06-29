@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-
 const {
   updateProfile,
   changePassword,
@@ -9,6 +8,7 @@ const {
 } = require("../controllers/userController");
 
 const verifyToken = require("../middleware/authMiddleware");
+const demoMode = require("../middleware/demoMode");
 
 const upload = multer({ dest: "uploads/" });
 
