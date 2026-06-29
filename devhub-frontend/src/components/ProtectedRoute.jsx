@@ -8,7 +8,6 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
 
   if (!user) {
-    // Agar user nahi hai, toh login page par bhejo aur current path yaad rakho
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;

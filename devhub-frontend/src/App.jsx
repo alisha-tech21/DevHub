@@ -17,7 +17,7 @@ import BlogGrid from "./components/BlogGrid";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { AuthContext, AuthProvider } from "./context/AuthContext";
+import { AuthContext } from "./context/AuthContext";
 import Documentation from "./pages/Documentation";
 import Status from "./pages/Status";
 import Security from "./pages/Security";
@@ -143,9 +143,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <AppContent />
     </Router>
   );
 }
