@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 const LoginPage = () => {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -71,13 +71,16 @@ const LoginPage = () => {
 
           setUser(data);
 
-          toast.success("Welcome to Demo Mode 🚀");
+          toast.dismiss();
+
+          toast.success("Welcome to Demo Mode 🚀", {
+            id: "demo-login",
+            duration: 1500,
+          });
 
           setTimeout(() => {
-            navigate(redirectPath, {
-              replace: true,
-            });
-          }, 800);
+            navigate(redirectPath, { replace: true });
+          }, 1500);
         } else {
           toast.error(data.message || "Demo account unavailable");
         }
@@ -154,7 +157,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050505]">
-      <Toaster position="bottom-center" />
       <div className="w-full max-w-[400px] mx-4 bg-[#0A0A0A] border border-neutral-800 p-5 sm:p-8 rounded-2xl shadow-2xl">
         <div className="flex justify-center mb-6">
           <h1 className="text-indigo-500 font-bold text-2xl tracking-[0.2em] uppercase cursor-pointer">
