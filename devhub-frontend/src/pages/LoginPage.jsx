@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -10,6 +11,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState({});
   const [timer, setTimer] = useState(180);
@@ -39,6 +41,43 @@ const LoginPage = () => {
     }
     if (location.state?.mode === "signup") setIsLogin(false);
   }, [location.pathname, location.state]);
+
+  const handleDemoLogin = async () => {
+    const redirectPath = location.state?.from || "/";
+    try {
+      const response = await fetch(`${API_URL}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: import.meta.env.VITE_DEMO_EMAIL,
+          password: import.meta.env.VITE_DEMO_PASSWORD,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("user", JSON.stringify(data));
+        localStorage.setItem("token", data.token);
+
+        setUser(data);
+        toast.success("Logged in successfully!");
+
+        setTimeout(() => {
+          navigate(redirectPath, {
+            replace: true,
+          });
+        }, 800);
+      } else {
+        toast.error(data.message || "Demo account unavailable");
+      }
+    } catch (err) {
+      toast.error("Failed to login");
+    }
+  };
+
   const handleAuth = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -182,16 +221,41 @@ const LoginPage = () => {
                 <label className="block text-xs font-semibold text-neutral-400 mb-1.5 uppercase tracking-wider">
                   Password
                 </label>
-                <input
-                  type="password"
-                  autoComplete={isLogin ? "current-password" : "new-password"}
-                  className="w-full bg-[#121212] border border-neutral-800 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    autoComplete={isLogin ? "current-password" : "new-password"}
+                    className="w-full bg-[#121212] border border-neutral-800 rounded-lg p-3 pr-12 text-white focus:outline-none focus:border-indigo-500"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white transition-colors cursor-pointer focus:outline-none focus:ring-0"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash size={18} />
+                    ) : (
+                      <FaEye size={18} />
+                    )}
+                  </button>
+                </div>
               </div>
             </>
+          )}
+
+          {isLogin && !isOtpSent && (
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="w-full mb-3 border border-indigo-500 text-indigo-400 py-3 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 font-semibold cursor-pointer"
+            >
+              🚀 Try Demo
+            </button>
           )}
 
           <button
@@ -206,6 +270,23 @@ const LoginPage = () => {
                 ? "Sign in"
                 : "Create account"}
           </button>
+          {isLogin && !isOtpSent && (
+            <div className="mt-5 rounded-lg border border-neutral-800 bg-[#111] p-4">
+              <p className="text-xs font-semibold text-neutral-300 mb-2">
+                Demo Credentials
+              </p>
+
+              <p className="text-xs text-neutral-500">
+                Email:
+                <span className="text-white ml-2">demo@devhub.com</span>
+              </p>
+
+              <p className="text-xs text-neutral-500 mt-1">
+                Password:
+                <span className="text-white ml-2">Demo@123</span>
+              </p>
+            </div>
+          )}
         </form>
 
         <p className="mt-6 text-center text-sm text-neutral-500">

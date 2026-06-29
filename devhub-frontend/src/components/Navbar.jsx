@@ -67,6 +67,9 @@ function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showDropdown]);
+
+  const isDemoUser = user?.email === import.meta.env.VITE_DEMO_EMAIL;
+
   return (
     <>
       <nav className="bg-[#000000] text-white w-full px-4 sm:px-6 md:px-12 py-4 flex items-center justify-between border-b border-neutral-900 sticky top-0 z-[100]">
@@ -202,6 +205,12 @@ function Navbar() {
                       <p className="text-xs text-neutral-500 truncate">
                         {user?.email || "user@devhub.com"}
                       </p>
+
+                      {isDemoUser && (
+                        <span className="inline-block mt-2 px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-semibold border border-amber-500/30">
+                          🚀 Demo Mode
+                        </span>
+                      )}
                     </div>
                   </div>
 
