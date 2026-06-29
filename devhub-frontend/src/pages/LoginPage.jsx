@@ -42,40 +42,49 @@ const LoginPage = () => {
     if (location.state?.mode === "signup") setIsLogin(false);
   }, [location.pathname, location.state]);
 
-  const handleDemoLogin = async () => {
-    const redirectPath = location.state?.from || "/";
-    try {
-      const response = await fetch(`${API_URL}/api/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: import.meta.env.VITE_DEMO_EMAIL,
-          password: import.meta.env.VITE_DEMO_PASSWORD,
-        }),
-      });
+  const handleDemoLogin = () => {
+    setEmail(import.meta.env.VITE_DEMO_EMAIL);
+    setPassword(import.meta.env.VITE_DEMO_PASSWORD);
 
-      const data = await response.json();
+    toast.success("Loading demo account...");
 
-      if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        localStorage.setItem("token", data.token);
+    setTimeout(async () => {
+      const redirectPath = location.state?.from || "/";
 
-        setUser(data);
-        toast.success("Logged in successfully!");
+      try {
+        const response = await fetch(`${API_URL}/api/users/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: import.meta.env.VITE_DEMO_EMAIL,
+            password: import.meta.env.VITE_DEMO_PASSWORD,
+          }),
+        });
 
-        setTimeout(() => {
-          navigate(redirectPath, {
-            replace: true,
-          });
-        }, 800);
-      } else {
-        toast.error(data.message || "Demo account unavailable");
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem("user", JSON.stringify(data));
+          localStorage.setItem("token", data.token);
+
+          setUser(data);
+
+          toast.success("Welcome to Demo Mode 🚀");
+
+          setTimeout(() => {
+            navigate(redirectPath, {
+              replace: true,
+            });
+          }, 800);
+        } else {
+          toast.error(data.message || "Demo account unavailable");
+        }
+      } catch (err) {
+        toast.error("Failed to login");
       }
-    } catch (err) {
-      toast.error("Failed to login");
-    }
+    }, 500);
   };
 
   const handleAuth = async (e) => {
@@ -270,23 +279,6 @@ const LoginPage = () => {
                 ? "Sign in"
                 : "Create account"}
           </button>
-          {isLogin && !isOtpSent && (
-            <div className="mt-5 rounded-lg border border-neutral-800 bg-[#111] p-4">
-              <p className="text-xs font-semibold text-neutral-300 mb-2">
-                Demo Credentials
-              </p>
-
-              <p className="text-xs text-neutral-500">
-                Email:
-                <span className="text-white ml-2">demo@devhub.com</span>
-              </p>
-
-              <p className="text-xs text-neutral-500 mt-1">
-                Password:
-                <span className="text-white ml-2">Demo@123</span>
-              </p>
-            </div>
-          )}
         </form>
 
         <p className="mt-6 text-center text-sm text-neutral-500">

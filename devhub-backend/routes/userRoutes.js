@@ -13,6 +13,5 @@ const verifyToken = require("../middleware/authMiddleware");
 const upload = multer({ dest: "uploads/" });
 
 router.post("/upload", upload.single("image"), uploadAvatar);
-router.put("/update/:id", verifyToken, updateProfile);
-
+router.put("/update/:id", verifyToken, demoMode, updateProfile);
 module.exports = router;
