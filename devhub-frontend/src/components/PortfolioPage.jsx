@@ -23,7 +23,7 @@ const StatCard = ({ title, value, icon, theme }) => (
     className="p-4 text-center min-w-[100px] transition-all duration-300 hover:scale-105 hover:-translate-y-1 cursor-pointer"
     style={{
       background: theme.surface,
-      border: `1px solid ${theme.border}`,
+      border: `0.5px solid ${theme.border}`,
       color: theme.text,
     }}
   >
@@ -172,7 +172,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         </p>
         <button
           onClick={handleScrollToSearch}
-          className="px-8 py-3 rounded-md font-bold"
+          className="px-8 py-3 rounded-md font-bold cursor pointer"
           style={{
             background: theme.button,
             color: theme.buttonText,
@@ -222,7 +222,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
             className="border p-6 mb-6 transition-colors duration-300"
             style={{
               background: theme.surface,
-              borderColor: theme.border,
+              border: `0.5px solid ${theme.border}`,
             }}
           >
             <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -392,7 +392,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                 className="border p-6 transition-all duration-300"
                 style={{
                   background: theme.surface,
-                  borderColor: theme.border,
+                  border: `0.5px solid ${theme.border}`,
                 }}
               >
                 {" "}
@@ -421,7 +421,7 @@ hover:-translate-y-1
 "
                       style={{
                         background: theme.card,
-                        border: `1px solid ${theme.border}`,
+                        border: `0.5px solid ${theme.border}`,
                         color: theme.text,
                       }}
                     >
@@ -439,7 +439,7 @@ hover:-translate-y-1
                 className="p-6"
                 style={{
                   background: theme.surface,
-                  border: `1px solid ${theme.border}`,
+                  border: `0.5px solid ${theme.border}`,
                 }}
               >
                 {" "}
@@ -461,7 +461,7 @@ hover:-translate-y-1
                         className="block p-4 transition-all duration-300 hover:-translate-y-1"
                         style={{
                           background: theme.card,
-                          border: `1px solid ${theme.border}`,
+                          border: `0.5px solid ${theme.border}`,
                         }}
                       >
                         <div className="flex items-center justify-between">
@@ -549,7 +549,7 @@ hover:-translate-y-1
                     style={{
                       background: theme.input,
                       color: theme.text,
-                      border: `1px solid ${theme.border}`,
+                      border: `0.5px solid ${theme.border}`,
                     }}
                   />
                 </div>
@@ -592,7 +592,7 @@ pointer-events-none
                     style={{
                       background: theme.input,
                       color: theme.text,
-                      border: `1px solid ${theme.border}`,
+                      border: `0.5px solid ${theme.border}`,
                     }}
                   >
                     <option value="stars">⭐ Most Stars</option>
@@ -677,7 +677,7 @@ hover:-translate-y-2
 "
                       style={{
                         background: theme.card,
-                        border: `1px solid ${theme.border}`,
+                        border: `0.5px solid ${theme.border}`,
                       }}
                     >
                       <h3
@@ -703,7 +703,7 @@ hover:-translate-y-2
                           className="inline-flex items-center gap-2 px-3 py-1"
                           style={{
                             background: theme.surface,
-                            border: `1px solid ${theme.border}`,
+                            border: `0.5px solid ${theme.border}`,
                           }}
                         >
                           {" "}
@@ -743,7 +743,7 @@ hover:-translate-y-2
                 className="p-6"
                 style={{
                   background: theme.surface,
-                  border: `1px solid ${theme.border}`,
+                  border: `0.5px solid ${theme.border}`,
                 }}
               >
                 {" "}
