@@ -63,6 +63,7 @@ exports.getGithubPortfolio = async (req, res) => {
         name: r.name,
         description: r.description,
         stars: r.stargazers_count,
+        forks: r.forks_count,
         language: r.language,
         updated_at: r.pushed_at,
         url: r.html_url,

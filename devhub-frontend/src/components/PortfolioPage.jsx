@@ -7,6 +7,7 @@ import {
   FaSearch,
   FaDownload,
   FaShareAlt,
+  FaCode,
 } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -354,20 +355,58 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                     <p className="text-neutral-400 mt-4 min-h-[60px] text-sm">
                       {repo.description || "No description"}
                     </p>
-                    <div className="flex items-center gap-4 mt-6 text-[11px] text-neutral-500">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full"
-                        style={{ backgroundColor: getLangColor(repo.language) }}
-                      ></span>
-                      {repo.language || "N/A"}
-                      <div>{getRelativeTime(repo.updated_at)}</div>
+                    <div className="flex flex-wrap items-center gap-4 mt-6 text-sm text-neutral-400">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-3 h-3 rounded-full"
+                          style={{
+                            backgroundColor: getLangColor(repo.language),
+                          }}
+                        />
+                        {repo.language || "Unknown"}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        ⭐ {repo.stars || 0}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <FaCode />
+                        {repo.forks || 0}
+                      </div>
+
+                      <div className="ml-auto">
+                        {getRelativeTime(repo.updated_at)}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
               <div className="bg-[#05070B] border border-neutral-500 p-6">
                 <h2 className="text-xl font-bold mb-4">Annual Contributions</h2>
-                <GitHubCalendar username={githubData.username} />
+                <GitHubCalendar
+                  username={githubData.username}
+                  blockSize={13}
+                  blockMargin={4}
+                  fontSize={14}
+                  hideMonthLabels={false}
+                  theme={{
+                    light: [
+                      "#161B22",
+                      "#0E4429",
+                      "#006D32",
+                      "#26A641",
+                      "#39D353",
+                    ],
+                    dark: [
+                      "#161B22",
+                      "#0E4429",
+                      "#006D32",
+                      "#26A641",
+                      "#39D353",
+                    ],
+                  }}
+                />{" "}
               </div>
             </div>
           </div>
