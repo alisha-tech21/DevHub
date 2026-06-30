@@ -7,8 +7,8 @@ import {
   FaSearch,
   FaDownload,
   FaShareAlt,
-  FaCode,
-  FaCircle,
+  FaSortAmountDown,
+  FaChevronDown,
 } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +54,8 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
   const [isSaved, setIsSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("stars");
+  const [showAllRepos, setShowAllRepos] = useState(false);
+  const [repoLimit] = useState(6);
   const API_URL = import.meta.env.VITE_API_URL;
   const handleDownload = useReactToPrint({
     contentRef: portfolioRef,
@@ -344,28 +346,124 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
 
             <div className="col-span-1 lg:col-span-3 space-y-6 order-1 lg:order-2">
               {" "}
-              <div className="flex justify-end mb-4">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-[#05070B] border border-neutral-600 px-4 py-2 rounded-lg"
-                >
-                  <option value="stars">Most Stars</option>
-                  <option value="forks">Most Forks</option>
-                  <option value="updated">Recently Updated</option>
-                  <option value="name">A-Z</option>
-                </select>
+              <div className="flex flex-wrap gap-4 items-center justify-between mb-6">
+                {" "}
+                <div className="relative flex-1 min-w-[240px] group">
+                  {" "}
+                  <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-cyan-400 transition" />
+                  <input
+                    type="text"
+                    placeholder="Search by repository name..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="
+            w-full
+            h-12
+            bg-[#05070B]
+            border
+            border-neutral-700
+            rounded-xl
+            pl-11
+            pr-4
+            text-white
+            placeholder:text-neutral-500
+            transition-all
+            duration-300
+            focus:border-cyan-500
+            focus:ring-2
+            focus:ring-cyan-500/20
+            outline-none
+        "
+                  />
+                </div>
+                <div className="relative w-full md:w-72 group">
+                  {" "}
+                  <FaSortAmountDown
+                    className="
+absolute
+left-4
+top-1/2
+-transform
+-translate-y-1/2
+text-cyan-400
+text-sm
+pointer-events-none
+"
+                  />{" "}
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="
+    w-full
+    h-12
+    appearance-none
+    rounded-xl
+    bg-[#05070B]
+    border
+    border-neutral-700
+    pl-11
+    pr-12
+    text-sm
+    font-medium
+    text-white
+    cursor-pointer
+    transition-all
+    duration-300
+    hover:border-cyan-500
+    hover:bg-[#0a0d12]
+    focus:border-cyan-500
+    focus:ring-2
+    focus:ring-cyan-500/20
+    outline-none
+  "
+                  >
+                    <option value="stars">⭐ Most Stars</option>
+                    <option value="forks">🍴 Most Forks</option>
+                    <option value="updated">🕒 Recently Updated</option>
+                    <option value="name">🔤 Alphabetical</option>
+                  </select>
+                  <FaChevronDown
+                    className="
+absolute
+right-4
+top-1/2
+-transform
+-translate-y-1/2
+text-neutral-400
+group-hover:text-cyan-400
+transition
+pointer-events-none
+"
+                  />{" "}
+                </div>
               </div>
-              <div className="mb-5">
-                <input
-                  type="text"
-                  placeholder="Search repository..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full bg-[#05070B] border border-neutral-600 rounded-lg px-4 py-3 text-white focus:border-cyan-500 outline-none"
-                />
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-2xl font-bold">
+                  {showAllRepos
+                    ? `All Repositories (${githubData.repos.length})`
+                    : `Pinned Repositories ({Math.min(repoLimit, githubData.repos.length)})`}
+                </h2>
+
+                {githubData.repos.length > repoLimit && (
+                  <button
+                    onClick={() => setShowAllRepos(!showAllRepos)}
+                    className="
+inline-flex
+items-center
+gap-2
+text-cyan-400
+font-semibold
+transition-all
+duration-300
+hover:text-cyan-300
+hover:gap-3
+cursor-pointer
+"
+                  >
+                    {showAllRepos ? "Show Less" : "View all →"}
+                  </button>
+                )}
               </div>
-              <h2 className="text-2xl font-bold">Top Repositories</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {githubData.repos
                   ?.filter((repo) =>
@@ -381,11 +479,27 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
 
                     return a.name.localeCompare(b.name);
                   })
+                  .slice(0, showAllRepos ? githubData.repos.length : repoLimit)
+
                   .map((repo) => (
                     <div
                       key={repo.name}
                       onClick={() => window.open(repo.url, "_blank")}
-                      className="group bg-[#05070B] border border-neutral-700 rounded-lg p-5 cursor-pointer transition-all duration-300 hover:border-cyan-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/10"
+                      className="
+group
+bg-[#05070B]
+border
+border-neutral-700
+rounded-lg
+p-5
+cursor-pointer
+transition-all
+duration-300
+hover:-translate-y-2
+hover:border-cyan-500
+hover:shadow-2xl
+hover:shadow-cyan-500/10
+"
                     >
                       <h3 className="text-cyan-400 text-xl font-bold hover:underline truncate">
                         {repo.name}
