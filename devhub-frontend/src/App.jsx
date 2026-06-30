@@ -22,6 +22,7 @@ import Documentation from "./pages/Documentation";
 import Status from "./pages/Status";
 import Security from "./pages/Security";
 import { ThemeContext } from "./context/ThemeContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function AppContent() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -30,7 +31,6 @@ function AppContent() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const fetchFilteredBlogs = async (tags) => {
@@ -83,13 +83,7 @@ function AppContent() {
   };
 
   return (
-    <div
-      className="min-h-screen font-sans"
-      style={{
-        background: theme.background,
-        color: theme.text,
-      }}
-    >
+    <div className="min-h-screen font-sans bg-[#050505] text-white">
       {" "}
       <Navbar />
       <main className="w-full">
@@ -126,14 +120,16 @@ function AppContent() {
           <Route
             path="/portfolio"
             element={
-              loading ? (
-                <div>Loading...</div>
-              ) : (
-                <PortfolioPage
-                  githubData={githubData}
-                  onFetchGithub={handleFetchGithub}
-                />
-              )
+              <ThemeProvider>
+                {loading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <PortfolioPage
+                    githubData={githubData}
+                    onFetchGithub={handleFetchGithub}
+                  />
+                )}
+              </ThemeProvider>
             }
           />
           <Route path="/documentation" element={<Documentation />}>

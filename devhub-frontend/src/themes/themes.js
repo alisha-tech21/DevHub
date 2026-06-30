@@ -3,21 +3,21 @@ export const themes = {
     name: "Default",
     mode: "dark",
 
-    background: "#121316",
-    surface: "#1A1C21",
-    card: "#202329",
+    background: "#060606",
+    surface: "#101112",
+    card: "#0d0e10",
 
     text: "#FFFFFF",
     muted: "#9CA3AF",
 
     accent: "#06B6D4",
 
-    border: "#2E323A",
+    border: "#cdcfd3",
 
     input: "#1F232B",
-    hover: "#2A3038",
+    hover: "#404751",
 
-    button: "#0891B2",
+    button: "#0f8eae",
     buttonText: "#FFFFFF",
   },
   dark: {

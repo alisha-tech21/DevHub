@@ -8,11 +8,9 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <Toaster position="top-right" />
-        <App />
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <Toaster position="top-right" />
+      <App />
+    </AuthProvider>
   </StrictMode>,
 );
