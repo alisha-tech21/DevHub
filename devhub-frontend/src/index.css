@@ -177,3 +177,6 @@ html {
     page-break-inside: avoid;
   }
 }
+.portfolio-search::placeholder {
+  color: #9ca3af;
+}

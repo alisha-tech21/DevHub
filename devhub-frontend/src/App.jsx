@@ -21,6 +21,7 @@ import { AuthContext } from "./context/AuthContext";
 import Documentation from "./pages/Documentation";
 import Status from "./pages/Status";
 import Security from "./pages/Security";
+import { ThemeContext } from "./context/ThemeContext";
 
 function AppContent() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -29,6 +30,7 @@ function AppContent() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const fetchFilteredBlogs = async (tags) => {
@@ -81,7 +83,14 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white font-sans">
+    <div
+      className="min-h-screen font-sans"
+      style={{
+        background: theme.background,
+        color: theme.text,
+      }}
+    >
+      {" "}
       <Navbar />
       <main className="w-full">
         <Routes>
