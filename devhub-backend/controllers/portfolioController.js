@@ -30,9 +30,9 @@ exports.getGithubPortfolio = async (req, res) => {
     const events = eventsRes.status === "fulfilled" ? eventsRes.value.data : [];
 
     // Top Repos logic
-    const topRepos = [...repos]
-      .sort((a, b) => b.stargazers_count - a.stargazers_count)
-      .slice(0, 6);
+    const sortedRepos = [...repos].sort(
+      (a, b) => b.stargazers_count - a.stargazers_count,
+    );
 
     // Activities logic
     const uniqueActivities = [];
@@ -59,7 +59,7 @@ exports.getGithubPortfolio = async (req, res) => {
       publicRepos: userData.public_repos,
       stars: repos.reduce((sum, repo) => sum + repo.stargazers_count, 0),
       languages: [...new Set(repos.map((r) => r.language).filter(Boolean))],
-      repos: topRepos.map((r) => ({
+      repos: repos.map((r) => ({
         name: r.name,
         description: r.description,
         stars: r.stargazers_count,
