@@ -754,26 +754,27 @@ hover:-translate-y-2
                   blockMargin={4}
                   fontSize={14}
                   hideMonthLabels={false}
-                  theme={
-                    theme.mode === "dark"
-                      ? {
-                          dark: [
-                            "#1F2937",
-                            "#1E3A34",
-                            "#256D5A",
-                            "#2FA36B",
-                            "#67C587",
-                          ],
-                        }
-                      : {
-                          light: [
-                            "#F3F4F6",
-                            "#D8F3E5",
-                            "#A8E6C5",
-                            "#5DCB95",
-                            "#2FA36B",
-                          ],
-                        }
+                 theme={
+  theme.mode === "dark"
+    ? {
+        dark: [
+          theme.card,
+          theme.hover,
+          theme.accent,
+          "#22c55e",
+          "#16a34a",
+        ],
+      }
+    : {
+        light: [
+          "#ebedf0",
+          "#9be9a8",
+          "#40c463",
+          "#30a14e",
+          "#216e39",
+        ],
+      }
+}
                   }
                 />{" "}
               </div>

@@ -8,10 +8,11 @@ function ThemeSwitcher() {
   const dropdownRef = useRef(null);
 
   const themes = [
+    { id: "default", name: "⚡ Default DevHub" },
     { id: "dark", name: "🌑 Dark" },
     { id: "ocean", name: "🌊 Ocean" },
-    { id: "emerald", name: "💚 Emerald" },
-    { id: "neon", name: "💜 Neon" },
+    { id: "emerald", name: "🌿 Emerald" },
+    { id: "royal", name: "💜 Royal" },
     { id: "light", name: "🤍 Light" },
   ];
 
