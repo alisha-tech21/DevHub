@@ -172,7 +172,11 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         </p>
         <button
           onClick={handleScrollToSearch}
-          className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-md font-bold"
+          className="px-8 py-3 rounded-md font-bold"
+          style={{
+            background: theme.button,
+            color: theme.buttonText,
+          }}
         >
           Go to Search
         </button>
@@ -247,7 +251,11 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                         "_blank",
                       )
                     }
-                    className="bg-cyan-600 hover:bg-cyan-700 hover:scale-105 hover:shadow-lg transition-all duration-300 text-white px-6 py-2 text-sm font-bold cursor-pointer"
+                    className="px-6 py-2 text-sm font-bold transition-all duration-300 hover:scale-105 cursor-pointer"
+                    style={{
+                      background: theme.button,
+                      color: theme.buttonText,
+                    }}
                   >
                     Follow
                   </button>
@@ -262,6 +270,11 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                           ? "bg-green-600 border-green-600 cursor-not-allowed"
                           : "border-indigo-500 hover:bg-indigo-600 hover:shadow-indigo-500/30"
                       }`}
+                      style={{
+                        background: isSaved ? "#16A34A" : theme.button,
+                        color: theme.buttonText,
+                        border: `1px solid ${theme.button}`,
+                      }}
                     >
                       {isSaved ? "Saved ✓" : "Save as My Portfolio"}
                     </button>
@@ -745,20 +758,20 @@ hover:-translate-y-2
                     theme.mode === "dark"
                       ? {
                           dark: [
-                            "#161B22",
-                            "#0E4429",
-                            "#006D32",
-                            "#26A641",
-                            "#39D353",
+                            "#1F2937",
+                            "#1E3A34",
+                            "#256D5A",
+                            "#2FA36B",
+                            "#67C587",
                           ],
                         }
                       : {
                           light: [
-                            "#ebedf0",
-                            "#9be9a8",
-                            "#40c463",
-                            "#30a14e",
-                            "#216e39",
+                            "#F3F4F6",
+                            "#D8F3E5",
+                            "#A8E6C5",
+                            "#5DCB95",
+                            "#2FA36B",
                           ],
                         }
                   }

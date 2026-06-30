@@ -1,4 +1,25 @@
 export const themes = {
+  default: {
+    name: "Default",
+    mode: "dark",
+
+    background: "#121316",
+    surface: "#1A1C21",
+    card: "#202329",
+
+    text: "#FFFFFF",
+    muted: "#9CA3AF",
+
+    accent: "#06B6D4",
+
+    border: "#2E323A",
+
+    input: "#1F232B",
+    hover: "#2A3038",
+
+    button: "#0891B2",
+    buttonText: "#FFFFFF",
+  },
   dark: {
     name: "Dark",
     mode: "dark",
@@ -69,26 +90,26 @@ export const themes = {
     name: "Emerald",
     mode: "dark",
 
-    background: "#081915",
-    surface: "#11251E",
-    card: "#173128",
+    background: "#0E1714",
+    surface: "#16221D",
+    card: "#1D2D27",
 
-    text: "#ECFDF5",
-    muted: "#A7D6BF",
+    text: "#F5F7F6",
+    muted: "#9FB4AA",
 
-    accent: "#22C55E",
+    accent: "#2FA36B",
 
-    border: "#295844",
+    border: "#2F4A40",
 
-    input: "#173128",
-    hover: "#214137",
+    input: "#1D2D27",
+    hover: "#294038",
 
-    button: "#16A34A",
+    button: "#2FA36B",
     buttonText: "#FFFFFF",
   },
 
-  neon: {
-    name: "Neon",
+  royal: {
+    name: "Royal",
     mode: "dark",
 
     background: "#11131D",
@@ -98,14 +119,13 @@ export const themes = {
     text: "#F8FAFC",
     muted: "#B3BDD1",
 
-    accent: "#A855F7",
+    accent: "#8B5CF6",
 
-    border: "#4C1D95",
+    border: "#50318C",
 
     input: "#22293A",
-    hover: "#30394D",
-
-    button: "#9333EA",
+    hover: "#31254A",
+    button: "#7C3AED",
     buttonText: "#FFFFFF",
   },
 };
