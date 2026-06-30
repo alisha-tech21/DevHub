@@ -283,13 +283,23 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                       }
                     }}
                     disabled={user && !githubData?.ownerEmail}
-                    className={`px-6 py-2 text-sm rounded-md transition-all duration-300 ${
+                    className={`px-6 py-2 text-sm rounded-md transition-all duration-300 hover:opacity-90 ${
                       user && !githubData?.ownerEmail
-                        ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
-                        : "border border-neutral-500 text-white hover:bg-neutral-800 hover:scale-105 cursor-pointer"
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
                     }`}
                     style={{
-                      borderColor: theme.border,
+                      background:
+                        user && !githubData?.ownerEmail
+                          ? theme.hover
+                          : theme.surface,
+
+                      color:
+                        user && !githubData?.ownerEmail
+                          ? theme.muted
+                          : theme.text,
+
+                      border: `1px solid ${theme.border}`,
                     }}
                   >
                     {user
@@ -312,7 +322,8 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                     className="w-11 h-11 border flex justify-center items-center transition"
                     style={{
                       background: theme.surface,
-                      borderColor: theme.border,
+                      color: theme.text,
+                      border: `1px solid ${theme.border}`,
                     }}
                   >
                     <FaDownload />
@@ -324,7 +335,8 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                     className="w-11 h-11 border flex justify-center items-center transition"
                     style={{
                       background: theme.surface,
-                      borderColor: theme.border,
+                      color: theme.text,
+                      border: `1px solid ${theme.border}`,
                     }}
                   >
                     <FaShareAlt />
@@ -440,7 +452,13 @@ hover:-translate-y-1
                         }}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wide">
+                          <span
+                            className="text-xs font-semibold uppercase tracking-wide"
+                            style={{
+                              color: theme.accent,
+                            }}
+                          >
+                            {" "}
                             {act.type.replace("Event", "")}
                           </span>
                           <FaCodeBranch
@@ -502,13 +520,10 @@ hover:-translate-y-1
                     className="
             w-full
             h-12
-            bg-[#05070B]
             border
-            border-neutral-700
             rounded-xl
             pl-11
             pr-4
-            text-white
             placeholder:text-neutral-500
             portfolio-search
             transition-all
@@ -519,7 +534,7 @@ hover:-translate-y-1
             outline-none
         "
                     style={{
-                      background: theme.surface,
+                      background: theme.input,
                       color: theme.text,
                       border: `1px solid ${theme.border}`,
                     }}
@@ -547,26 +562,22 @@ pointer-events-none
     h-12
     appearance-none
     rounded-xl
-    bg-[#05070B]
     border
-    border-neutral-700
     pl-11
     pr-12
     text-sm
     font-medium
-    text-white
     cursor-pointer
     transition-all
     duration-300
     hover:border-cyan-500
-    hover:bg-[#0a0d12]
     focus:border-cyan-500
     focus:ring-2
     focus:ring-cyan-500/20
     outline-none
   "
                     style={{
-                      background: theme.surface,
+                      background: theme.input,
                       color: theme.text,
                       border: `1px solid ${theme.border}`,
                     }}
@@ -613,6 +624,9 @@ hover:text-cyan-300
 hover:gap-3
 cursor-pointer
 "
+                    style={{
+                      color: theme.accent,
+                    }}
                   >
                     {showAllRepos ? "Show Less" : "View all →"}
                   </button>
@@ -653,7 +667,13 @@ hover:-translate-y-2
                         border: `1px solid ${theme.border}`,
                       }}
                     >
-                      <h3 className="text-cyan-400 text-xl font-bold hover:underline truncate">
+                      <h3
+                        className="text-xl font-bold hover:underline truncate"
+                        style={{
+                          color: theme.accent,
+                        }}
+                      >
+                        {" "}
                         {repo.name}
                       </h3>
                       <p
