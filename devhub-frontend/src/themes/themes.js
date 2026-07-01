@@ -4,15 +4,15 @@ export const themes = {
     mode: "dark",
 
     background: "#060606",
-    surface: "#121313",
-    card: "#0e0e0f",
+    surface: "#1a1b1b",
+    card: "#131314",
 
     text: "#FFFFFF",
     muted: "#9CA3AF",
 
     accent: "#06B6D4",
 
-    border: "#bdbec0",
+    border: "#9a9a9c",
 
     input: "#1F232B",
     hover: "#404751",

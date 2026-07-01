@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import { useReactToPrint } from "react-to-print";
 import { ThemeContext } from "../context/ThemeContext";
 import ThemeSwitcher from "./ThemeSwitcher";
+import CountUp from "react-countup";
 
 const StatCard = ({ title, value, icon, theme }) => (
   <div
@@ -31,8 +32,9 @@ const StatCard = ({ title, value, icon, theme }) => (
       {icon}
     </div>
 
-    <h3 className="text-xl font-bold">{value}</h3>
-
+    <h3 className="text-xl font-bold">
+      <CountUp end={value} duration={2} separator="," />
+    </h3>
     <p className="text-[10px] uppercase" style={{ color: theme.muted }}>
       {title}
     </p>
@@ -172,7 +174,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         </p>
         <button
           onClick={handleScrollToSearch}
-          className="px-8 py-3 rounded-md font-bold cursor pointer"
+          className="px-8 py-3 rounded-md font-bold cursor pointer transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl"
           style={{
             background: theme.button,
             color: theme.buttonText,
@@ -251,10 +253,11 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                         "_blank",
                       )
                     }
-                    className="px-6 py-2 text-sm font-bold transition-all duration-300 hover:scale-105 cursor-pointer"
+                    className="px-6 py-2 text-sm font-bold rounded-md cursor-pointer transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl"
                     style={{
                       background: theme.button,
                       color: theme.buttonText,
+                      boxShadow: `0 0 0 transparent`,
                     }}
                   >
                     Follow
@@ -265,7 +268,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                     <button
                       onClick={saveMyPortfolio}
                       disabled={isSaved}
-                      className={`border px-6 py-2 text-sm font-bold rounded-md transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer ${
+                      className={`px-6 py-2 rounded-md text-sm font-bold cursor-pointer transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl ${
                         isSaved
                           ? "bg-green-600 border-green-600 cursor-not-allowed"
                           : "border-indigo-500 hover:bg-indigo-600 hover:shadow-indigo-500/30"
@@ -296,7 +299,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                       }
                     }}
                     disabled={user && !githubData?.ownerEmail}
-                    className={`px-6 py-2 text-sm rounded-md transition-all duration-300 hover:opacity-90 ${
+                    className={`px-6 py-2 text-sm rounded-md transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-lg ${
                       user && !githubData?.ownerEmail
                         ? "cursor-not-allowed"
                         : "cursor-pointer"
@@ -332,7 +335,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                   <button
                     title="Download Portfolio (PDF)"
                     onClick={handleDownload}
-                    className="w-11 h-11 border flex justify-center items-center transition"
+                    className="w-11 h-11 border rounded-md flex justify-center items-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
                     style={{
                       background: theme.surface,
                       color: theme.text,
@@ -345,7 +348,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                   <button
                     title="Share Portfolio"
                     onClick={handleShare}
-                    className="w-11 h-11 border flex justify-center items-center transition"
+                    className="w-11 h-11 border rounded-md flex justify-center items-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
                     style={{
                       background: theme.surface,
                       color: theme.text,
@@ -595,10 +598,10 @@ pointer-events-none
                       border: `0.5px solid ${theme.border}`,
                     }}
                   >
-                    <option value="stars">⭐ Most Stars</option>
-                    <option value="forks">🍴 Most Forks</option>
-                    <option value="updated">🕒 Recently Updated</option>
-                    <option value="name">🔤 Alphabetical</option>
+                    <option value="stars"> Most Stars</option>
+                    <option value="forks"> Most Forks</option>
+                    <option value="updated">Recently Updated</option>
+                    <option value="name">Alphabetical</option>
                   </select>
                   <FaChevronDown
                     className="
@@ -635,6 +638,7 @@ transition-all
 duration-300
 hover:text-cyan-300
 hover:gap-3
+hover:scale-105
 cursor-pointer
 "
                     style={{
@@ -698,6 +702,25 @@ hover:-translate-y-2
                         {" "}
                         {repo.description || "No description"}
                       </p>
+                      {/* Repository Topics */}
+
+                      {repo.topics?.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {repo.topics.map((topic) => (
+                            <span
+                              key={topic}
+                              className="px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:scale-105"
+                              style={{
+                                background: theme.surface,
+                                color: theme.accent,
+                                border: `1px solid ${theme.border}`,
+                              }}
+                            >
+                              #{topic}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <div className="flex flex-wrap items-center gap-4 mt-6 text-sm text-neutral-400">
                         <div
                           className="inline-flex items-center gap-2 px-3 py-1"
@@ -740,7 +763,7 @@ hover:-translate-y-2
                   ))}
               </div>
               <div
-                className="p-6"
+                className="p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 style={{
                   background: theme.surface,
                   border: `0.5px solid ${theme.border}`,
@@ -756,18 +779,18 @@ hover:-translate-y-2
                   hideMonthLabels={false}
                   theme={{
                     light: [
-                      theme.card,
+                      "#EBEDF0",
                       theme.border,
                       theme.accent,
                       theme.button,
-                      theme.button,
+                      "#0F766E",
                     ],
                     dark: [
-                      theme.card,
-                      theme.border,
-                      theme.accent,
+                      "#161B22",
+                      "#263445",
+                      "#2D6CDF",
                       theme.button,
-                      theme.button,
+                      "#7DD3FC",
                     ],
                   }}
                 />{" "}
