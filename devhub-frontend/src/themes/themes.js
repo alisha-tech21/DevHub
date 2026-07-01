@@ -4,7 +4,7 @@ export const themes = {
     mode: "dark",
 
     background: "#060606",
-    surface: "#1a1b1b",
+    surface: "#111111",
     card: "#131314",
 
     text: "#FFFFFF",
@@ -46,9 +46,9 @@ export const themes = {
     name: "Light",
     mode: "light",
 
-    background: "#F5F7FB",
-    surface: "#FFFFFF",
-    card: "#FCFCFD",
+    background: "#fafbfb",
+    surface: "#fdfdfd",
+    card: "#ffffff",
 
     text: "#111827",
     muted: "#6B7280",

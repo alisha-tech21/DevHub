@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import { useReactToPrint } from "react-to-print";
 import { ThemeContext } from "../context/ThemeContext";
 import ThemeSwitcher from "./ThemeSwitcher";
-import CountUp from "react-countup";
+import PortfolioPDF from "./PortfolioPDF";
 
 const StatCard = ({ title, value, icon, theme }) => (
   <div
@@ -32,9 +32,7 @@ const StatCard = ({ title, value, icon, theme }) => (
       {icon}
     </div>
 
-    <h3 className="text-xl font-bold">
-      <CountUp end={value} duration={2} separator="," />
-    </h3>
+    <h3 className="text-xl font-bold">{value}</h3>
     <p className="text-[10px] uppercase" style={{ color: theme.muted }}>
       {title}
     </p>
@@ -65,6 +63,7 @@ const getLangColor = (lang) => {
 
 function PortfolioPage({ githubData, onFetchGithub, loading }) {
   const portfolioRef = useRef(null);
+  const pdfRef = useRef(null);
   const { user } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
@@ -72,12 +71,16 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("stars");
   const [showAllRepos, setShowAllRepos] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
+  const downloadRef = useRef(null);
   const [repoLimit] = useState(6);
   const API_URL = import.meta.env.VITE_API_URL;
+
   const handleDownload = useReactToPrint({
-    contentRef: portfolioRef,
-    documentTitle: `${githubData?.username || "portfolio"}-portfolio`,
+    contentRef: pdfRef,
+    documentTitle: `${githubData.username}-portfolio`,
   });
+
   const handleScrollToSearch = () => {
     const searchBar = document.getElementById("search-bar");
     if (searchBar) {
@@ -165,7 +168,12 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         <div className="w-20 h-20 bg-neutral-900 rounded-full flex items-center justify-center mb-6 border border-neutral-800 shadow-lg">
           <FaSearch className="text-cyan-500 text-3xl" />
         </div>
-        <h2 className="text-3xl font-bold text-white mb-3">
+        <h2
+          className="text-3xl font-bold text-white mb-3"
+          style={{
+            color: theme.text,
+          }}
+        >
           No Portfolio Data
         </h2>
         <p className="text-neutral-400 mb-6 text-center max-w-sm">
@@ -205,8 +213,19 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
 
     checkSaved();
   }, [user, githubData]);
+  useEffect(() => {
+    const close = (e) => {
+      if (!downloadRef.current?.contains(e.target)) {
+        setDownloadOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", close);
+
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
   return (
-    <div ref={portfolioRef}>
+    <div>
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -332,18 +351,57 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
                 <div className="flex gap-3 mb-10 print:hidden">
                   <ThemeSwitcher />
 
-                  <button
-                    title="Download Portfolio (PDF)"
-                    onClick={handleDownload}
-                    className="w-11 h-11 border rounded-md flex justify-center items-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
-                    style={{
-                      background: theme.surface,
-                      color: theme.text,
-                      border: `1px solid ${theme.border}`,
-                    }}
-                  >
-                    <FaDownload />
-                  </button>
+                  <div className="relative" ref={downloadRef}>
+                    <button
+                      onClick={() => setDownloadOpen(!downloadOpen)}
+                      className="px-4 h-11 rounded-md flex items-center gap-2 transition-all duration-300 hover:scale-105 cursor-pointer"
+                      style={{
+                        background: theme.surface,
+                        color: theme.text,
+                        border: `1px solid ${theme.border}`,
+                      }}
+                    >
+                      <FaDownload />
+                      <span>Download</span>
+                      <FaChevronDown
+                        className={`transition ${downloadOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {downloadOpen && (
+                      <div
+                        className="absolute right-0 mt-2 w-52 rounded-md overflow-hidden shadow-2xl z-50"
+                        style={{
+                          background: theme.surface,
+                          border: `1px solid ${theme.border}`,
+                        }}
+                      >
+                        <button
+                          onClick={() => {
+                            window.open(
+                              `${window.location.origin}/portfolio`,
+                              "_blank",
+                            );
+
+                            setDownloadOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-neutral-700 transition"
+                        >
+                          🌐 Online Portfolio
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            handleDownload();
+                            setDownloadOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-neutral-700 transition"
+                        >
+                          📄 Professional PDF
+                        </button>
+                      </div>
+                    )}
+                  </div>
 
                   <button
                     title="Share Portfolio"
@@ -705,18 +763,18 @@ hover:-translate-y-2
                       {/* Repository Topics */}
 
                       {repo.topics?.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-4">
+                        <div className="flex flex-wrap gap-2 mt-3">
                           {repo.topics.map((topic) => (
                             <span
                               key={topic}
-                              className="px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:scale-105"
+                              className="px-2 py-1 text-xs rounded-full"
                               style={{
                                 background: theme.surface,
+                                border: `0.5px solid ${theme.border}`,
                                 color: theme.accent,
-                                border: `1px solid ${theme.border}`,
                               }}
                             >
-                              #{topic}
+                              {topic}
                             </span>
                           ))}
                         </div>
@@ -799,6 +857,26 @@ hover:-translate-y-2
           </div>
         </div>
       </motion.div>
+      {/* Hidden Printable Portfolio */}
+
+      {/* Hidden Printable Portfolio */}
+
+      <div
+        style={{
+          position: "fixed",
+          left: "-99999px",
+          top: 0,
+          width: "794px",
+          minHeight: "1123px", // A4 height fix
+          background: "#fff",
+          color: "#000",
+          padding: "40px",
+        }}
+      >
+        <div ref={pdfRef}>
+          <PortfolioPDF githubData={githubData} />
+        </div>
+      </div>
     </div>
   );
 }

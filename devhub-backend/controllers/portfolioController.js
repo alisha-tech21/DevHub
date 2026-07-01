@@ -27,6 +27,25 @@ exports.getGithubPortfolio = async (req, res) => {
     }
     const userData = userRes.value.data;
     const repos = reposRes.status === "fulfilled" ? reposRes.value.data : [];
+    const reposWithTopics = await Promise.all(
+      repos.map(async (repo) => {
+        try {
+          const repoDetails = await githubApi.get(
+            `/repos/${username}/${repo.name}`,
+          );
+
+          return {
+            ...repo,
+            topics: repoDetails.data.topics || [],
+          };
+        } catch {
+          return {
+            ...repo,
+            topics: [],
+          };
+        }
+      }),
+    );
     const events = eventsRes.status === "fulfilled" ? eventsRes.value.data : [];
 
     // Top Repos logic
@@ -59,13 +78,13 @@ exports.getGithubPortfolio = async (req, res) => {
       publicRepos: userData.public_repos,
       stars: repos.reduce((sum, repo) => sum + repo.stargazers_count, 0),
       languages: [...new Set(repos.map((r) => r.language).filter(Boolean))],
-      repos: repos.map((r) => ({
+      repos: reposWithTopics.map((r) => ({
         name: r.name,
         description: r.description,
         stars: r.stargazers_count,
         forks: r.forks_count,
         language: r.language,
-        topics: r.topics || [],
+        topics: r.topics,
         updated_at: r.pushed_at,
         url: r.html_url,
       })),

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const express = require("express");
@@ -13,12 +15,11 @@ const cloudinary = require("cloudinary").v2;
 const blogRoutes = require("./routes/blogRoutes");
 const githubRoutes = require("./routes/githubRoutes");
 
-require("dotenv").config();
-
 const app = express();
+
 app.use(
   cors({
-    origin: ["https://dev-hub-ebon.vercel.app"],
+    origin: ["http://localhost:5176", "https://your-vercel-app.vercel.app"],
     credentials: true,
   }),
 );

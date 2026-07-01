@@ -1,5 +1,5 @@
 const { Resend } = require("resend");
-
+console.log("KEY:", process.env.RESEND_API_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async ({ email, otp }) => {
