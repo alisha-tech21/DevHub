@@ -78,7 +78,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
 
   const handleDownload = useReactToPrint({
     contentRef: pdfRef,
-    documentTitle: `${githubData.username}-portfolio`,
+    documentTitle: `${githubData?.username || "portfolio"}-portfolio`,
   });
 
   const handleScrollToSearch = () => {
@@ -104,17 +104,48 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     };
     loadSavedPortfolio();
   }, [user, githubData, onFetchGithub]);
+  useEffect(() => {
+    console.log("GitHub Data received:", githubData);
+  }, [githubData]);
+
+  useEffect(() => {
+    const checkSaved = async () => {
+      if (!user || !githubData?.username) return;
+
+      const res = await fetch(`${API_URL}/api/portfolio/${user._id}`);
+
+      const data = await res.json();
+
+      if (data?.githubUsername === githubData.username) {
+        setIsSaved(true);
+      } else {
+        setIsSaved(false);
+      }
+    };
+
+    checkSaved();
+  }, [user, githubData]);
+  useEffect(() => {
+    const close = (e) => {
+      if (!downloadRef.current?.contains(e.target)) {
+        setDownloadOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", close);
+
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
 
   const saveMyPortfolio = async () => {
-    if (!user) return;
-
+    if (!user || !githubData) return;
     try {
       const res = await fetch(`${API_URL}/api/portfolio/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: user._id,
-          githubUsername: githubData.username,
+          githubUsername: githubData?.username,
         }),
       });
 
@@ -127,11 +158,11 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
     }
   };
   const handleShare = async () => {
-    const url = `https://github.com/${githubData.username}`;
-
+    if (!githubData) return;
+    const url = `https://github.com/${githubData?.username}`;
     if (navigator.share) {
       await navigator.share({
-        title: `${githubData.name}'s Portfolio`,
+        title: `${githubData?.name || "Developer"}'s Portfolio`,
         text: "Check out this developer portfolio",
         url,
       });
@@ -192,38 +223,7 @@ function PortfolioPage({ githubData, onFetchGithub, loading }) {
         </button>
       </div>
     );
-  useEffect(() => {
-    console.log("GitHub Data received:", githubData);
-  }, [githubData]);
 
-  useEffect(() => {
-    const checkSaved = async () => {
-      if (!user || !githubData?.username) return;
-
-      const res = await fetch(`${API_URL}/api/portfolio/${user._id}`);
-
-      const data = await res.json();
-
-      if (data?.githubUsername === githubData.username) {
-        setIsSaved(true);
-      } else {
-        setIsSaved(false);
-      }
-    };
-
-    checkSaved();
-  }, [user, githubData]);
-  useEffect(() => {
-    const close = (e) => {
-      if (!downloadRef.current?.contains(e.target)) {
-        setDownloadOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", close);
-
-    return () => document.removeEventListener("mousedown", close);
-  }, []);
   return (
     <div>
       <motion.div
