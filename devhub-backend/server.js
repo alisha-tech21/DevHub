@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5176", "https://your-vercel-app.vercel.app"],
+    origin: ["http://localhost:5176", "https://dev-hub-ebon.vercel.app"],
     credentials: true,
   }),
 );
